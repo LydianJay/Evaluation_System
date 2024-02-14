@@ -114,6 +114,7 @@
                                 <p class="h2 text-center">Evaluation per Program</p>
                                 <h4>Term: <?php echo $getEval->name ?></h4>
                                 <h4>Program: <?php echo $getCourse->description ?></h4>
+                                <p class="h4">Subject: <?php echo $getSub->title ?> </p>
                                 <h4>No of students: <?php echo $noOfStud ?></h4>
                                 <table class="table table-bordered" id="dataTable">
                                     <thead>
@@ -139,11 +140,11 @@
                                         foreach ($records as $rec) { ?>
                                             <tr>
                                                 <td class="text-center"><?php echo $id?></td>
-                                                <td><?php echo $rec->subject_title ?></td>
-                                                <td><?php echo $rec->cat1 ?></td>
-                                                <td><?php echo $rec->cat2 ?></td>
-                                                <td><?php echo $rec->cat3 ?></td>
-                                                <td><?php echo $rec->cat4 ?></td>
+                                                <td class="text-center"><?php echo $rec->subject_title ?></td>
+                                                <td class="text-center"><?php echo $rec->cat1 ?></td>
+                                                <td class="text-center"><?php echo $rec->cat2 ?></td>
+                                                <td class="text-center"><?php echo $rec->cat3 ?></td>
+                                                <td class="text-center"><?php echo $rec->cat4 ?></td>
                                                 <td class="text-center"><?php echo $total = $rec->cat1 + $rec->cat2 + $rec->cat3 + $rec->cat4  ?></td>
                                             </tr>
                                             
@@ -160,23 +161,23 @@
                                         <tr>
                                             <th></th>
                                             
-                                            <th class="text-start">Average</th>
-                                            <th>
+                                            <th class="text-center">Average</th>
+                                            <th class="text-center">
                                                 <?php
                                                 $ave1 = $cat1total / $ctr;
                                                 echo round($ave1, 2);   ?>
                                             </th>
-                                            <th>
+                                            <th class="text-center">
                                                 <?php
                                                 $ave2 = $cat2total / $ctr;
                                                 echo round($ave2, 2);   ?>
                                             </th>
-                                            <th>
+                                            <th class="text-center">
                                                 <?php
                                                 $ave3 = $cat3total / $ctr;
                                                 echo round($ave3, 2);   ?>
                                             </th>
-                                            <th>
+                                            <th class="text-center">
                                                 <?php
                                                 $ave4 = $cat4total / $ctr;
                                                 echo round($ave4, 2);   ?>

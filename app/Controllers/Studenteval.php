@@ -157,6 +157,7 @@ class Studenteval extends BaseController
         $subjects = $this->db->table('subjects');
         $subjects->orderBy('subCode', 'asc');
         $data['subjects'] = $subjects->get()->getResult();
+        $data['subID'] = $subjects->getWhere(['subID' => $subjectID], 1);
 
         $faculty = $this->db->table('faculty');
         $faculty->orderBy('fname', 'asc');
@@ -166,7 +167,7 @@ class Studenteval extends BaseController
 
         $data['getEval']    = $evaluations->where('id', $evaluationID)->get()->getRow();
         $data['getCourse']  = $courses->where('courseID', $courseID)->get()->getRow();
-        $data['subID']      = $subjects->where('subID', $subjectID)->get()->getRow();
+        $data['getSub']      = $subjects->where('subID', $subjectID)->get()->getRow();
         
         $data['courseID']     = $courseID;
         $data['evaluationID'] = $evaluationID;
