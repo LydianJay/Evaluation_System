@@ -61,6 +61,11 @@ abstract class BaseController extends Controller
         $this->data['app_desc']     = 'Evaluation Description';
         $this->data['app_owner']    = 'Menchie P. Alindao & Mechaelah M. Famador';
         $this->data['app_yr']       = date('Y');
+
+        $this->data['student'] = "";
+        if (isset($this->session->studentLogin['id'])) {
+            $this->data['student'] = $this->session->studentLogin['fname'] . ' ' . $this->session->studentLogin['lname'];
+        }
     }
 
     public function table($tbl)

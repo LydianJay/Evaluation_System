@@ -91,7 +91,7 @@
                                     </tr>
                                     <tr>
                                         <td>COURSE</td>
-                                        <td><?php echo ucfirst($records->course) ?></td>
+                                        <td><?php echo ucfirst($records->title) ?></td>
                                     </tr>
                                     <tr>
                                         <td>YEAR LEVEL</td>
@@ -105,7 +105,6 @@
             </div>
 
             <div class="row">
-
                 <div class="col-12">
                     <div class="card card-plain h-100">
                         <h4 class="card-header p-1">
@@ -123,7 +122,7 @@
                                                         Subject
                                                     </td>
                                                     <td>
-                                                        <select name="subID" id="subID" class="form-select ">
+                                                        <select name="subID" id="subID" class="form-select select2">
                                                             <option value=""></option>
                                                             <?php foreach ($subjects as $sub) { ?>
                                                                 <option value="<?php echo $sub->subID ?>"><?php echo $sub->subCode . " " . $sub->title ?></option>
@@ -134,14 +133,24 @@
                                                         Instructor
                                                     </td>
                                                     <td>
-                                                        <select name="facultyID" id="facultyID" class="form-select ">
+                                                        <select name="facultyID" id="facultyID" class="form-select select2">
                                                             <option value=""></option>
                                                             <?php foreach ($faculty as $fac) { ?>
                                                                 <option value="<?php echo $fac->id ?>"><?php echo $fac->fname . " " . $fac->lname ?></option>
                                                             <?php } ?>
                                                         </select>
                                                     </td>
-
+                                                    <td style="width: 100px; text-align:right">
+                                                        Evaluation
+                                                    </td>
+                                                    <td>
+                                                        <select name="evaluationID" id="evaluationID" class="form-select select2">
+                                                            <option value=""></option>
+                                                            <?php foreach ($evaluations as $eval) { ?>
+                                                                <option value="<?php echo $eval->id ?>"><?php echo $eval->name ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </td>
                                                     <td>
                                                         <button class="btn btn-primary mb-1">Add</button>
                                                     </td>
@@ -161,7 +170,8 @@
                                                     <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">Subject Code</th>
                                                     <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">Description</th>
                                                     <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">Instructor</th>
-                                                    <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">OPTION</th>
+                                                    <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">Evaluation</th>
+                                                    <th colspan="2" class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">OPTION</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -170,11 +180,18 @@
                                                         <td style="text-align:center"><?php echo $block->subCode ?></td>
                                                         <td style="text-align:center"><?php echo $block->title ?></td>
                                                         <td style="text-align:center"><?php echo $block->fname . ' ' . $block->lname ?></td>
-                                                        <td style="text-align:center"><a href="<?php echo $current_page . '/delete_enroll/' . $block->detailsID . '/' . $block->studentID  ?>" class="btn btn-primary">Cancel</a></td>
+                                                        <td style="text-align:center"><?php echo $block->name ?></td>
+                                                        <td style="text-align:center"><a href="<?php echo $current_page . '/delete_enroll/' . $block->detailsID . '/' . $block->studentID  ?>" class="btn btn-primary">Delete</a></td>
+                                                        <?php if ($block->dstatus == 1) { ?>
+                                                            <td style="text-align:center"><a href="<?php echo $current_page . '/deactivate/' . $block->detailsID . '/' . $block->studentID  ?>" class="btn btn-primary">Deactivate</a></td>
+                                                        <?php } else { ?>
+                                                            <td style="text-align:center"><a href="<?php echo $current_page . '/activate/' . $block->detailsID . '/' . $block->studentID  ?>" class="btn btn-primary">Activate</a></td>
+                                                        <?php } ?>
                                                     </tr>
                                                 <?php } ?>
                                             </tbody>
                                         </table>
+
                                     </div>
                                 </div>
                             </div>

@@ -27,29 +27,29 @@
         <div class="container-fluid px-2 px-md-4">
             <div class="card card-body mx-3 mx-md-4 mt-5">
                 <form action="<?php echo $current_page . '/update' ?>" method="post">
-                    <input type="hidden" name="id" id="id" value="<?php echo $records->id ?>">
+                    <input type="hidden" name="id" id="id" value="<?php echo $records->catID ?>">
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td style="width: 100px;">QUESTION NO</td>
+                                <td style="width: 100px;">CATEGORY</td>
                                 <td>
                                     <div class="input-group input-group-outline my-3" style="width: 300px;">
-                                        <input type="text" name="questionNo" id="questionNo" class="form-control" value="<?php echo $records->questionNo ?>">
+                                        <input type="text" name="questionNo" id="questionNo" class="form-control" value="<?php echo $records->catName ?>">
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="width: 100px;">QUESTION LABEL</td>
+                                <td style="width: 100px;">TITLE</td>
                                 <td>
                                     <div class="input-group input-group-outline my-3" style="width: 300px;">
-                                        <textarea name="questionLabel" id="questionLabel" cols="30" rows="10" class="form-control"><?php echo $records->questionLabel ?></textarea>
+                                        <textarea name="questionLabel" id="questionLabel" cols="30" rows="10" class="form-control"><?php echo $records->title ?></textarea>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="div">
-                        <a class="btn btn-outline-secondary" href="<?php echo $current_page . '/view/' . $records->id ?>">Cancel</a>
+                        <a class="btn btn-outline-secondary" href="<?php echo $current_page . '/view/' . $records->catID ?>">Cancel</a>
                         <button type="submit" id="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>

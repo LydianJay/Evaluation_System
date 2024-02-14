@@ -16,6 +16,8 @@ use CodeIgniter\Commands\Utilities\Routes\FilterCollector;
 
 /**
  * Collects data for Auto Routing Improved.
+ *
+ * @see \CodeIgniter\Commands\Utilities\Routes\AutoRouterImproved\AutoRouteCollectorTest
  */
 final class AutoRouteCollector
 {
@@ -60,8 +62,7 @@ final class AutoRouteCollector
     }
 
     /**
-     * @return array<int, array<int, string>>
-     * @phpstan-return list<list<string>>
+     * @return list<list<string>>
      */
     public function get(): array
     {

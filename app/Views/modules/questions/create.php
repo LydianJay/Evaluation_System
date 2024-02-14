@@ -30,7 +30,7 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td style="width: 100px;">QUESTION NO</td>
+                                <td style="width: 100px;">CATEGORY</td>
                                 <td>
                                     <div class="input-group input-group-outline my-3" style="width: 300px;">
                                         <input type="text" name="questionNo" id="questionNo" class="form-control">
@@ -38,7 +38,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="width: 100px;">QUESTION LABEL</td>
+                                <td style="width: 100px;">DEFINITION</td>
                                 <td>
                                     <div class="input-group input-group-outline my-3" style="width: 300px;">
                                         <textarea name="questionLabel" id="questionLabel" cols="30" rows="10" class="form-control"></textarea>

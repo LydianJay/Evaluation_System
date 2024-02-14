@@ -82,6 +82,21 @@ class Faculty extends BaseController
         $this->builder->where($this->pfield, $id);
         $this->data['records'] = $this->builder->get()->getFirstRow();
 
+        $builder2 = $this->db->table('ballot');
+        $builder2->select('SUM(ballot.rating) as total_rating');
+        $builder2->select('subjects.title');
+        $builder2->select('subjects.subCode');
+        $builder2->select('evaluations.name');
+        $builder2->select('evaluations.id');
+        $builder2->join('subjects', 'subjects.subID = ballot.subID', 'left');
+        $builder2->join('evaluations', 'evaluations.id = ballot.evaluationID', 'left');
+        $builder2->where('facultyID', $id);
+        $builder2->groupBy('evaluationID');
+        $result = $builder2->get()->getResult();
+
+
+        $this->data['result'] = $result;
+
         echo view('header', $this->data);
         echo view($this->module_path   . '/view');
         echo view('footer');

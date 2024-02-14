@@ -48,18 +48,18 @@
                             <table class="table table-sm align-items-center mb-0" id="dataTable">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">QUESTION NO.</th>
-                                        <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">QUESTION NAME</th>
+                                        <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">CATEGORY</th>
+                                        <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">DEFINITION</th>
                                         <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">OPTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($records as $rec) { ?>
                                         <tr>
-                                            <td style="text-align:center"><?php echo $rec->questionNo ?></td>
-                                            <td style="text-align:center"><?php echo ucfirst($rec->questionLabel) ?></td>
+                                            <td style="text-align:center"><?php echo $rec->catName ?></td>
+                                            <td style="text-align:center"><?php echo ucfirst($rec->title) ?></td>
                                             <td style="text-align:center">
-                                                <a href="<?php echo $current_page . '/view/' . $rec->id ?>" class="btn btn-info btn-sm mb-0">VIEW</a>
+                                                <a href="<?php echo $current_page . '/view/' . $rec->catID ?>" class="btn btn-info btn-sm mb-0">VIEW</a>
                                             </td>
                                         </tr>
                                     <?php } ?>

@@ -9,6 +9,7 @@
                     </a>
                     <?php echo ucfirst($module_title) ?>
                 </h6>
+                <h3><?php echo $student ?></h3>
                 <a class="nav-link ml-auto text-dark d-flex" href="<?php echo site_url('mobile/logout') ?>">
                     <div class="text-dark text-center  d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">power_settings_new</i>

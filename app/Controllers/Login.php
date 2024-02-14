@@ -13,7 +13,7 @@ class Login extends BaseController
     public function __construct()
     {
         $this->pfield                  = 'userID';
-        $this->data['module_title']    = 'Login';
+        $this->data['module_title']    = 'Console Login';
         $this->data['module_desc']     = 'Description';
         $this->data['current_page']    = $this->current_page = site_url('login');
         $this->module_path             = 'modules/categories/';
@@ -35,7 +35,7 @@ class Login extends BaseController
         $record = $this->builder->get()->getRow();
 
         if (!empty($record)) {
-            if ($record && md5($password) == $record->password) {
+            if ($record && md5(strval($password)) == $record->password) {
                 $data['loggedIn'] = [
                     'userID'    => $record->userID,
                     'fname'     => $record->fname,

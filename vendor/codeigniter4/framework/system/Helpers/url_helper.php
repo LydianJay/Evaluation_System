@@ -88,10 +88,12 @@ if (! function_exists('previous_url')) {
     {
         // Grab from the session first, if we have it,
         // since it's more reliable and safer.
-        // Otherwise, grab a sanitized version from $_SERVER.
-        $referer = $_SESSION['_ci_previous_url'] ?? Services::request()->getServer('HTTP_REFERER', FILTER_SANITIZE_URL);
+        if (isset($_SESSION)) {
+            $referer = session('_ci_previous_url');
+        }
 
-        $referer ??= site_url('/');
+        // Otherwise, grab a sanitized version from $_SERVER.
+        $referer ??= request()->getServer('HTTP_REFERER', FILTER_SANITIZE_URL) ?? site_url('/');
 
         return $returnObject ? new URI($referer) : $referer;
     }
@@ -288,7 +290,7 @@ if (! function_exists('safe_mailto')) {
             if ($ordinal < 128) {
                 $x[] = '|' . $ordinal;
             } else {
-                if (empty($temp)) {
+                if ($temp === []) {
                     $count = ($ordinal < 224) ? 2 : 3;
                 }
 

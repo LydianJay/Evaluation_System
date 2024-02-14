@@ -10,12 +10,12 @@ class Mobile extends BaseController
 
     public function __construct()
     {
-        $this->pfield                  = 'id';
-        $this->data['module_title']    = 'evaluations';
-        $this->data['module_desc']     = 'Description';
-        $this->data['current_page']    = site_url('mobile');
-        $this->module_path             = 'modules/mobile/';
-        $this->builder                 = $this->table('evaluations');
+        $this->pfield               = 'id';
+        $this->data['module_title'] = 'Evaluation';
+        $this->data['module_desc']  = 'Description';
+        $this->data['current_page'] = site_url('mobile');
+        $this->module_path          = 'modules/mobile/';
+        $this->builder              = $this->table('evaluations');
     }
 
     public function index()
@@ -25,33 +25,27 @@ class Mobile extends BaseController
 
     public function saveLogin()
     {
-        $username   = $this->request->getPost('username');
-        $password   = $this->request->getPost('password');
+        $username = $this->request->getPost('username');
 
         $this->builder = $this->table('students');
-        $this->builder->select('id, idno, fname, mname, lname, course, yr_lvl, status');
+        $this->builder->select('id, idno, fname, mname, lname, course, yr_lvl, status, courseID');
         $this->builder->where('idno', $username);
         $record = $this->builder->get()->getRow();
 
         if (!empty($record)) {
-            if ($password == $record->idno) {
-                $data['studentLogin'] = [
-                    'id'     => $record->id,
-                    'idno'   => $record->idno,
-                    'fname'  => $record->fname,
-                    'mname'  => $record->mname,
-                    'lname'  => $record->lname,
-                    'course' => $record->course,
-                    'yr_lvl' => $record->yr_lvl,
-                    'status' => $record->status,
-                ];
+            $data['studentLogin'] = [
+                'id'       => $record->id,
+                'idno'     => $record->idno,
+                'fname'    => $record->fname,
+                'mname'    => $record->mname,
+                'lname'    => $record->lname,
+                'courseID' => $record->courseID,
+                'yr_lvl'   => $record->yr_lvl,
+                'status'   => $record->status,
+            ];
 
-                $this->session->set($data);
-                return redirect()->to(site_url('mobile/show'));
-            } else {
-                $this->setMessage('danger', 'Incorrect password');
-                return redirect()->to(site_url('mobile'));
-            }
+            $this->session->set($data);
+            return redirect()->to(site_url('mobile/show'));
         } else {
             $this->setMessage('danger', 'User not found');
             return redirect()->to(site_url('mobile'));
@@ -60,20 +54,31 @@ class Mobile extends BaseController
 
     public function list($evaluationID)
     {
-        $this->data['studentIdno'] = $this->session->studentLogin['idno'];
-        $this->data['studentID']   = $this->session->studentLogin['id'];
+        $data = $this->data;
+
+        $data['studentIdno'] = $this->session->studentLogin['idno'];
+        $data['studentID']   = $this->session->studentLogin['id'];
 
         $builder2 = $this->table('blocksections_details');
         $builder2->select('blocksections_details.*');
         $builder2->select('faculty.*');
+        $builder2->select('subjects.*');
         $builder2->join('faculty', 'blocksections_details.facultyID = faculty.id', 'left');
+        $builder2->join('subjects', 'blocksections_details.subID = subjects.subID', 'left');
         $builder2->where('studentID', $this->session->studentLogin['id']);
-        $this->data['records'] =  $builder2->get()->getResult();
+        $builder2->where('evaluationID', $evaluationID);
+        $data['records'] = $builder2->get()->getResult();
 
-        $this->data['evaluationID'] = $evaluationID;
+        $builder3 = $this->table('evaluations');
+        $builder3->select('status');
+        $builder3->where('id', $evaluationID);
+        $data['evalstat'] = $builder3->get()->getRow();
 
-        $this->data['module_title'] = "Faculty";
-        echo view($this->module_path . '/header', $this->data);
+        $data['evaluationID'] = $evaluationID;
+
+        $data['module_title'] = "Faculty";
+
+        echo view($this->module_path . '/header', $data);
         echo view($this->module_path . '/list');
         echo view($this->module_path . '/header');
     }
@@ -84,7 +89,7 @@ class Mobile extends BaseController
             ->select('faculty.id, faculty.fname, faculty.mname, faculty.lname, SUM(ballot.rating) AS total_rating')
             ->join('ballot', 'faculty.id = ballot.facultyID', 'left')
             ->groupby('faculty.id, faculty.fname')
-            ->orderBy('total_rating', 'desc') // Order by total_rating in descending order
+            ->orderBy('total_rating', 'desc')  // Order by total_rating in descending order
             ->get();
         $facultyResults = $facultyQuery->getResult();
 
@@ -95,25 +100,53 @@ class Mobile extends BaseController
         echo view($this->module_path . '/header');
     }
 
-    public function evaluate($evaluationID, $facultyID)
+    public function evaluate($evaluationID, $facultyID, $subID)
     {
-        $this->builder = $this->table('faculty');
-        $this->builder->select('*');
-        $this->builder->where($this->pfield, $facultyID);
-        $this->data['records'] = $this->builder->get()->getFirstRow();
+        $data = $this->data;
 
-        $this->builder = $this->table('questions');
-        $this->builder->select('*');
-        $this->builder->orderBy('questionNo', 'asc');
-        $this->data['questions'] = $this->builder->get()->getResult();
+        $this->builder = $this->table('blocksections_details');
+        $this->builder->select('blocksections_details.*');
+        $this->builder->select('faculty.*');
+        $this->builder->select('subjects.*');
+        $this->builder->join('faculty', 'blocksections_details.facultyID = faculty.id', 'left');
+        $this->builder->join('subjects', 'blocksections_details.subID = subjects.subID', 'left');
+        $this->builder->where('blocksections_details.facultyID', $facultyID);
+        $this->builder->where('blocksections_details.subID', $subID);
+        $this->builder->where('blocksections_details.studentID', $this->session->studentLogin['id']);
+        $data['records'] = $this->builder->get()->getFirstRow();
 
-        $this->data['facultyID']    = $facultyID;
-        $this->data['studentIdno']  = $this->session->studentLogin['idno'];
-        $this->data['evaluationID'] = $evaluationID;
-        $this->data['studentID']    = $this->session->studentLogin['id'];
+        $this->builder = $this->db->table('categories');
+        $this->builder->select('categories.*');
+        $this->builder->orderBy('catName', 'asc');
+        $categories = $this->builder->get()->getResult();
 
-        $this->data['module_title'] = "Evaluate";
-        echo view($this->module_path . '/header', $this->data);
+        $questions = array();
+        foreach ($categories as $cat) {
+            $builder2 = $this->db->table('questions_details');
+            $builder2->where('catID', $cat->catID);
+            $builder2->orderBy('quesNo', 'asc');
+            $temp = $builder2->get()->getResult();
+
+            $questions[$cat->catID]['category'] = $cat;
+
+            if ($temp) {
+                $questions[$cat->catID]['questions'] = $temp;
+            } else {
+                $questions[$cat->catID]['questions'] = array();  // Ensure an empty array if no questions found
+            }
+        }
+
+        $data['questions']    = $questions;
+        $data['subID']        = $subID;
+        $data['facultyID']    = $facultyID;
+        $data['studentIdno']  = $this->session->studentLogin['idno'];
+        $data['evaluationID'] = $evaluationID;
+        $data['studentID']    = $this->session->studentLogin['id'];
+        $data['courseID']     = $this->session->studentLogin['courseID'];
+
+        $data['module_title'] = "Evaluate";
+
+        echo view($this->module_path . '/header', $data);
         echo view($this->module_path . '/evaluate');
         echo view($this->module_path . '/header');
     }
@@ -122,6 +155,7 @@ class Mobile extends BaseController
     {
         $this->builder = $this->table('evaluations');
         $this->builder->select('*');
+        $this->builder->orderBy('evalOrder', 'asc');
         $this->data['records'] = $this->builder->get()->getResult();
 
         echo view($this->module_path . '/header', $this->data);
@@ -136,28 +170,65 @@ class Mobile extends BaseController
         echo view('footer');
     }
 
-    public function myscore($evaluationID, $facultyID)
+    public function myscore($evaluationID, $facultyID, $subID)
     {
-        $this->data['facultyID']    = $facultyID;
-        $this->data['studentIdno']  = $this->session->studentLogin['idno'];
-        $this->data['evaluationID'] = $evaluationID;
-        $this->data['studentID']    = $this->session->studentLogin['id'];
+        $data = $this->data;
 
-        $this->builder = $this->table('faculty');
-        $this->builder->select('*');
-        $this->builder->where($this->pfield, $facultyID);
-        $this->data['records'] = $this->builder->get()->getFirstRow();
+        $data['facultyID']    = $facultyID;
+        $data['studentIdno']  = $this->session->studentLogin['idno'];
+        $data['evaluationID'] = $evaluationID;
+        $data['studentID']    = $this->session->studentLogin['id'];
+        $data['subID']        = $subID;
 
-        $this->builder = $this->table('ballot');
-        $this->builder->select('questions.*');
-        $this->builder->select('ballot.*');
-        $this->builder->join('questions', 'ballot.questionID = questions.id', 'left');
-        $this->builder->where('facultyID', $facultyID);
-        $this->builder->where('studentID',  $this->data['studentIdno']);
-        $this->data['questions'] = $this->builder->get()->getResult();
+        $this->builder = $this->table('blocksections_details');
+        $this->builder->select('blocksections_details.*');
+        $this->builder->select('faculty.*');
+        $this->builder->select('subjects.*');
+        $this->builder->join('faculty', 'blocksections_details.facultyID = faculty.id', 'left');
+        $this->builder->join('subjects', 'blocksections_details.subID = subjects.subID', 'left');
+        $this->builder->where('blocksections_details.facultyID', $facultyID);
+        $this->builder->where('blocksections_details.subID', $subID);
+        $this->builder->where('blocksections_details.studentID', $this->session->studentLogin['id']);
+        $data['records'] = $this->builder->get()->getFirstRow();
 
-        $this->data['module_title'] = "My Score";
-        echo view($this->module_path . '/header', $this->data);
+        $this->builder = $this->db->table('categories');
+        $this->builder->select('categories.*');
+        $this->builder->orderBy('catName', 'asc');
+        $categories = $this->builder->get()->getResult();
+
+        $builder3 = $this->table('students');
+        $builder3->select('*');
+        $builder3->where('id', $data['studentID']);
+        $idno = $builder3->get()->getRow()->idno;
+
+        $questions = array();
+
+        foreach ($categories as $cat) {
+            $builder2 = $this->db->table('questions_details');
+            $builder2->select('questions_details.quesID, questions_details.quesNo, questions_details.title, questions_details.definition');
+            $builder2->select('ballot.*');
+            $builder2->join('ballot', 'ballot.questionID = questions_details.quesID', 'left');
+            $builder2->where('ballot.evaluationID', $evaluationID);
+            $builder2->where('ballot.subID', $subID);
+            $builder2->where('ballot.catID', $cat->catID);
+            $builder2->where('ballot.studentID',  $idno);
+            $builder2->where('ballot.facultyID', $facultyID);
+            $builder2->orderBy('questions_details.quesNo', 'asc');
+            $temp = $builder2->get()->getResult();
+
+            $questions[$cat->catID]['category'] = $cat;
+
+            if ($temp) {
+                $questions[$cat->catID]['questions'] = $temp;
+            } else {
+                $questions[$cat->catID]['questions'] = array();  // Ensure an empty array if no questions found
+            }
+        }
+
+        $data['questions']    = $questions;
+        $data['module_title'] = "My Score";
+
+        echo view($this->module_path . '/header', $data);
         echo view($this->module_path . '/myscore');
         echo view($this->module_path . '/header');
     }
@@ -169,35 +240,59 @@ class Mobile extends BaseController
         $facultyID     = $this->request->getPost('facultyID');
         $studentIdno   = $this->request->getPost('studentIdno');
         $studentID     = $this->request->getPost('studentID');
+        $subID         = $this->request->getPost('subID');
+        $courseID      = $this->request->getPost('courseID');
 
-        $questions = $this->db->table('questions');
-        $questions->orderBy('questionNo', 'asc');
-        $result  =   $questions->get()->getResult();
+        $questions = $this->db->table('questions_details');
+        $questions->orderBy('quesNo', 'asc');
+        $result = $questions->get()->getResult();
 
+        $dataAll = array();
         foreach ($result as $res) {
-            $questionID = $this->request->getPost('question_' . $res->id);
-            $rating    = $this->request->getPost('rating_' . $res->id);
+            $catID      = $this->request->getPost('catID_' . $res->catID);
+            $questionID = $this->request->getPost('quesID_' . $res->quesID);
+            $rating     = $this->request->getPost('rating_' . $res->quesID);
 
-            $data = [
-                'evaluationID'  => $evaluationID,
-                'facultyID'     => $facultyID,
-                'studentID'     => $studentIdno,
-                'questionID'    => $questionID,
-                'rating'        => $rating
-            ];
+            // Check if the data already exists
+            $existingData = $this->builder
+                ->where('evaluationID', $evaluationID)
+                ->where('facultyID', $facultyID)
+                ->where('studentID', $studentIdno)
+                ->where('questionID', $questionID)
+                ->where('subID', $subID)
+                ->where('courseID', $courseID)
+                ->where('catID', $catID)
+                ->where('rating', $rating)
+                ->countAllResults();
 
-            if (!$this->builder->insert($data)) {
-                $id = $this->db->insertID();
+            if (!$existingData) {
+                // Data doesn't exist, so insert it
+                $data = [
+                    'evaluationID' => $evaluationID,
+                    'facultyID'    => $facultyID,
+                    'studentID'    => $studentIdno,
+                    'questionID'   => $questionID,
+                    'subID'        => $subID,
+                    'courseID'     => $courseID,
+                    'catID'        => $catID,
+                    'rating'       => $rating
+                ];
 
-                $this->setMessage('danger', 'Error creating account');
-                return redirect()->to('faculty');
+                if (!$this->builder->insert($data)) {
+                    $this->setMessage('danger', 'Error creating account');
+                    return redirect()->to('faculty');
+                }
+
+                $dataAll[] = $data;
             }
         }
+
 
         $builder2 = $this->table('blocksections_details');
         $builder2->set('bstatus', 1);
         $builder2->where('facultyID', $facultyID);
         $builder2->where('studentID', $studentID);
+        $builder2->where('subID',  $subID);
         $builder2->update();
 
         $this->setMessage('success', 'Succesfully evaluated');
@@ -228,20 +323,20 @@ class Mobile extends BaseController
 
     public function update()
     {
-        $id        = $this->request->getPost('id');
-        $idno      = $this->request->getPost('idno');
-        $fname     = $this->request->getPost('fname');
-        $mname     = $this->request->getPost('mname');
-        $lname     = $this->request->getPost('lname');
-        $position  = $this->request->getPost('position');
+        $id       = $this->request->getPost('id');
+        $idno     = $this->request->getPost('idno');
+        $fname    = $this->request->getPost('fname');
+        $mname    = $this->request->getPost('mname');
+        $lname    = $this->request->getPost('lname');
+        $position = $this->request->getPost('position');
 
         $data = [
-            'idno'       => $idno,
-            'fname'      => $fname,
-            'lname'      => $lname,
-            'mname'      => $mname,
-            'lname'      => $lname,
-            'position'   => $position
+            'idno'     => $idno,
+            'fname'    => $fname,
+            'lname'    => $lname,
+            'mname'    => $mname,
+            'lname'    => $lname,
+            'position' => $position
         ];
 
         $this->builder->set($data);

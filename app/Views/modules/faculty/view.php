@@ -83,4 +83,52 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-12 col-xl-12">
+                        <div class="card card-plain h-100">
+                            <div class="card-body p-3">
+                                <table class="table align-items-center mb-0" id="dataTable" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Evaluation</th>
+                                            <th>Sub Code</th>
+                                            <th>Subject</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if ($result) { ?>
+                                            <?php foreach ($result as $res) { ?>
+                                                <td><?php echo $res->name ?></td>
+                                                <td><?php echo $res->subCode ?></td>
+                                                <td><?php echo $res->title ?></td>
+                                                <td><?php echo $res->total_rating ?></td>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <script>
+            $(document).ready(function() {
+                $('#dataTable').DataTable({
+                    dom: 'Bfrtip',
+                    searching: false, // Disable search
+                    buttons: [
+                        'print',
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            download: 'open'
+                        }
+                    ],
+                });
+            });
+        </script>

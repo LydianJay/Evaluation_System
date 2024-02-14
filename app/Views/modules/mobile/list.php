@@ -10,15 +10,18 @@
                     <?php echo ucfirst($module_title) ?> List
                 </h4>
             </nav>
+            <h3><?php echo $student ?></h3>
             <a class="nav-link text-dark d-flex ml-auto" href="<?php echo site_url('mobile/logout') ?>">
+
                 <div class="text-dark text-center d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">power_settings_new</i>
                 </div>
+
+
                 <span class="nav-link-text ms-1">Logout</span>
             </a>
         </div>
     </nav>
-
 
     <!-- End Navbar -->
     <div class="container-fluid py-4">
@@ -33,6 +36,7 @@
                 </div>
             <?php } ?>
         </div>
+
         <div class="row">
             <div class="col-12">
                 <div class="card my-4">
@@ -46,24 +50,27 @@
                             <table class="table table-sm align-items-center mb-0" id="dataTable">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">ID</th>
                                         <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">NAME</th>
+                                        <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">SUBJECT</th>
                                         <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">OPTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($records as $rec) { ?>
-                                        <tr>
-                                            <td style="text-align:center"><?php echo $rec->idno ?></td>
-                                            <td style="text-align:center"><?php echo ucfirst($rec->fname) . ' ' .  ucfirst($rec->mname) . ' ' . ucfirst($rec->lname) ?></td>
-                                            <td style="text-align:center">
-                                                <?php if ($rec->bstatus ==  0) { ?>
-                                                    <a href="<?php echo $current_page . '/evaluate/' . $evaluationID . '/' . $rec->id ?>" class="btn btn-primary btn-sm mb-0">Evaluate</a>
-                                                <?php } else { ?>
-                                                    <a href="<?php echo $current_page . '/myscore/' . $evaluationID . '/' . $rec->id ?>" class="btn btn-primary btn-sm mb-0">My score</a>
-                                                <?php } ?>
-                                            </td>
-                                        </tr>
+                                        <?php if ($rec->dstatus) { ?>
+                                            <tr>
+                                                <td style="text-align:center"><?php echo ucfirst($rec->fname) . ' ' .  ucfirst($rec->mname) . ' ' . ucfirst($rec->lname) ?></td>
+                                                <td style="text-align:center"><?php echo $rec->title ?></td>
+                                                <td style="text-align:center">
+                                                    <?php if ($rec->bstatus ==  0 && $evalstat->status != 0) { ?>
+                                                        <a href="<?php echo $current_page . '/evaluate/' . $evaluationID . '/' . $rec->id . '/' . $rec->subID ?>" class="btn btn-primary btn-sm mb-0">Evaluate</a>
+                                                    <?php } else { ?>
+                                                        <a href="<?php echo $current_page . '/myscore/' . $evaluationID . '/' . $rec->id . '/' . $rec->subID ?>" class="btn btn-info btn-sm mb-0">My score</a>
+                                                    <?php } ?>
+                                                </td>
+                                            </tr>
+                                            <tr></tr>
+                                        <?php } ?>
                                     <?php } ?>
                                 </tbody>
                             </table>
@@ -72,7 +79,6 @@
                 </div>
             </div>
         </div>
-
 
         <script>
             $('#dataTable').DataTable({

@@ -18,6 +18,8 @@ use Config\App;
 
 /**
  * URI for the application site
+ *
+ * @see \CodeIgniter\HTTP\SiteURITest
  */
 class SiteURI extends URI
 {
@@ -195,7 +197,7 @@ class SiteURI extends URI
         // Validate baseURL
         if (filter_var($baseURL, FILTER_VALIDATE_URL) === false) {
             throw new ConfigException(
-                'Config\App::$baseURL is invalid.'
+                'Config\App::$baseURL "' . $baseURL . '" is not a valid URL.'
             );
         }
 
@@ -211,7 +213,7 @@ class SiteURI extends URI
 
         $this->baseSegments = $this->convertToSegments($this->basePathWithoutIndexPage);
 
-        if ($this->indexPage) {
+        if ($this->indexPage !== '') {
             $this->baseSegments[] = $this->indexPage;
         }
     }

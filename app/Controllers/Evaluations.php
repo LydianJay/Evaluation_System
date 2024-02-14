@@ -66,22 +66,46 @@ class Evaluations extends BaseController
 
     public function view($id)
     {
+        $data = $this->data;
+
         $this->builder->select('*');
         $this->builder->where($this->pfield, $id);
-        $this->data['records'] = $records = $this->builder->get()->getFirstRow();
+        $eval = $records = $this->builder->get()->getRow();
+        
+        $builder1 = $this->db->table('ballot');
+        $builder1->select('*');
+        $data['count'] = $builder1->countAllResults();
 
-        $this->data['result'] = array();
+        $data['result'] = array();
         if ($records->status == 0) {
-            $facultyQuery = $this->db->table('faculty')
-                ->select('ballot.evaluationID, faculty.id, faculty.fname, faculty.mname, faculty.lname, SUM(ballot.rating) AS total_rating')
-                ->join('ballot', 'faculty.id = ballot.facultyID', 'left')
-                ->where('evaluationID', $records->id)
-                ->orderBy('total_rating', 'desc');
-            $facultyResults = $facultyQuery->get()->getResult();
-            $this->data['result'] = $facultyResults;
+    
+            $builder1->select('ballot.id');
+            $builder1->select('ballot.evaluationID');
+            $builder1->select('ballot.facultyID');
+            $builder1->select('ballot.studentID');
+            $builder1->select('ballot.questionID');
+            $builder1->select('ballot.subID');
+            $builder1->select('SUM(ballot.rating) as total_rating');
+            $builder1->select('faculty.*');
+            $builder1->select('subjects.*');
+            $builder1->join('faculty', 'faculty.id = ballot.facultyID', 'left');
+            $builder1->join('subjects', 'subjects.subID = ballot.subID', 'left');
+            $builder1->where('ballot.evaluationID', $id);
+            $builder1->groupBy('ballot.subID');
+            $builder1->orderBy('total_rating', 'desc');
+            $results = $builder1->get()->getResult();
+
+            $builder3 = $this->table('ballot');
+            $data['noStud'] = $builder3->countAllResults();
+
+            $builder3 = $this->table('questions');
+            $data['noQues'] = $builder3->countAllResults();
+            $data['result'] = $results;
         }
 
-        echo view('header', $this->data);
+        $data['records'] = $eval;
+ 
+        echo view('header', $data);
         echo view($this->module_path   . '/view');
         echo view('footer');
     }

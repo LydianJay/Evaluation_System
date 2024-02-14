@@ -55,11 +55,13 @@
                 </div>
             </div>
             <?php if ($result) { ?>
+                <h3 style="margin-top: 10px;">Result</h3>
                 <table class="table align-items-center mb-0" id="dataTable">
                     <thead>
                         <tr>
                             <th style="text-align: center;">Rank</th>
-                            <th style="text-align: center;">Faculty Name</th>
+                            <th style="text-align: left;">Faculty Name</th>
+                            <th style="text-align: left;">Subject</th>
                             <th style="text-align: center;">Rating</th>
                         </tr>
                     </thead>
@@ -67,13 +69,33 @@
                         <?php
                         $rank = 1;
                         foreach ($result as $res) { ?>
-                            <tr>
-                                <td style="text-align: center;"><?php echo $rank++ ?></td>
-                                <td style="text-align: center;"><?php echo $res->fname . ' ' . $res->mname . ' ' . $res->lname ?></td>
-                                <td style="text-align: center;"><?php echo $res->total_rating ?></td>
-                            </tr>
+                            <?php if ($res->total_rating) { ?>
+                                <tr>
+                                    <td style="text-align: center;"><?php echo $rank++ ?></td>
+                                    <td style="text-align: left;"><?php echo $res->fname . ' ' . $res->mname . ' ' . $res->lname ?></td>
+                                    <td style="text-align: left;"><?php echo $res->title ?></td>
+                                    <td style="text-align: center;"><?php echo number_format($res->total_rating / $count, 2)    ?></td>
+                                </tr>
+                            <?php } ?>
                         <?php } ?>
                     </tbody>
                 </table>
             <?php } ?>
         </div>
+
+        <script>
+            $(document).ready(function() {
+                $('#dataTable').DataTable({
+                    dom: 'Bfrtip',
+                    searching: false, // Disable search
+                    buttons: [
+                        'print',
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            download: 'open'
+                        }
+                    ],
+                });
+            });
+        </script>

@@ -47,8 +47,8 @@
             <div class="row gx-4 mb-2">
                 <div class="col-auto my-auto">
                     <div class="h-100 d-flex">
-                        <h5 class="mb-1"> QUESTION NO. <?php echo $records->questionNo ?> </h5>
-                        <a class="ms-2 btn btn-primary btn-sm" href="<?php echo $current_page . '/edit/' . $records->id ?>">
+                        <h5 class="mb-1"> CATEGORY <?php echo $records->catName ?> </h5>
+                        <a class="ms-2 btn btn-primary btn-sm" href="<?php echo $current_page . '/edit/' . $records->catID ?>">
                             <i class="fas fa-user-edit"></i> Edit
                         </a>
                     </div>
@@ -63,10 +63,79 @@
                                     <tbody>
                                         <tr>
                                             <!-- <td style="width: 100px;">QUESTION</td> -->
-                                            <td><?php echo ucfirst($records->questionLabel) ?></td>
+                                            <td><?php echo ucfirst($records->title) ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-plain h-100">
+                        <h4 class="card-header p-1">
+                            QUESTIONS
+                        </h4>
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <form action="<?php echo $current_page . '/add' ?>" method="post">
+                                        <input type="hidden" name="catID" value="<?php echo $records->catID  ?>">
+                                        <table class="table table-bordered table-sm align-items-center mb-0">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width: 100px; text-align:right">
+                                                        QUESTION NO.
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group input-group-outline my-3 is-filled" style="width: 300px;">
+                                                            <input type="text" class="form-control" name="quesNo">
+                                                        </div>
+                                                    </td>
+                                                    <td style="width: 100px; text-align:right">
+                                                        DEFINITION
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group input-group-outline my-3 is-filled" style="width: 300px;">
+                                                            <input type="text" class="form-control" name="definition">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-primary mb-1">Add</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 mt-5">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm align-items-center mb-0" id="dataTable">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">QUESTION NO</th>
+                                                    <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">DEFINITION</th>
+                                                    <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">OPTION</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($questions as $ques) { ?>
+                                                    <tr>
+                                                        <td style="text-align:center"><?php echo $ques->quesNo ?></td>
+                                                        <td style="text-align:center"><?php echo $ques->definition ?></td>
+                                                        <td style="text-align:center"><a href="<?php echo $current_page . '/delete_question/' . $ques->catID . '/' . $ques->quesID  ?>" class="btn btn-primary">Delete</a></td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

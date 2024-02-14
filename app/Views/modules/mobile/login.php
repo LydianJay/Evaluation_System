@@ -18,8 +18,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="<?php echo base_url() ?>/assets/img/logos/snsu.png">
+  <link rel="icon" type="image/png" href="<?php echo base_url() ?>/assets/img/logos/snsu.png">
   <title> <?php echo $app_title ?> </title>
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
@@ -46,7 +46,8 @@
           <div class="col-lg-4 col-md-8 col-12 mx-auto">
             <div class="card z-index-0 fadeIn3 fadeInBottom">
               <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1 d-flex justify-content-center">
+                  <img src="<?php echo base_url() ?>/assets/img/logos/snsu.png" alt="" style="width: 50px;">
                   <h4 class="text-white font-weight-bolder text-center mt-2 mb-0"><?php echo $module_title ?></h4>
                 </div>
               </div>
@@ -64,10 +65,6 @@
                   <div class="input-group input-group-outline my-3">
                     <label class="form-label">ID No.</label>
                     <input type="username" class="form-control" name="username" required>
-                  </div>
-                  <div class="input-group input-group-outline mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password" required>
                   </div>
                   <div class="text-center">
                     <button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>

@@ -22,6 +22,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class Controller
+ *
+ * @see \CodeIgniter\ControllerTest
  */
 class Controller
 {
@@ -63,7 +65,7 @@ class Controller
     /**
      * Once validation has been run, will hold the Validation instance.
      *
-     * @var ValidationInterface
+     * @var ValidationInterface|null
      */
     protected $validator;
 
@@ -130,7 +132,7 @@ class Controller
      */
     protected function loadHelpers()
     {
-        if (empty($this->helpers)) {
+        if ($this->helpers === []) {
             return;
         }
 

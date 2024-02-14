@@ -61,6 +61,7 @@
                                         <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">ID</th>
                                         <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">NAME</th>
                                         <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">COURSE</th>
+                                        <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">Year</th>
                                         <th class="text-uppercase text-secondary text-xl font-weight-bolder opacity-7" style="text-align:center">OPTION</th>
                                     </tr>
                                 </thead>
@@ -69,7 +70,8 @@
                                         <tr>
                                             <td style="text-align:center"><?php echo $rec->idno ?></td>
                                             <td style="text-align:center"><?php echo ucfirst($rec->fname) . ' ' .  ucfirst($rec->mname) . ' ' . ucfirst($rec->lname) ?></td>
-                                            <td style="text-align:center"><?php echo ucfirst($rec->course) . ' ' . ucfirst($rec->yr_lvl) ?></td>
+                                            <td style="text-align:center"><?php echo ucfirst($rec->title) ?></td>
+                                            <td style="text-align:center"><?php echo ucfirst($rec->yr_lvl) ?></td>
                                             <td style="text-align:center">
                                                 <a href="<?php echo $current_page . '/view/' . $rec->id ?>" class="btn btn-info btn-sm mb-0">VIEW</a>
                                             </td>

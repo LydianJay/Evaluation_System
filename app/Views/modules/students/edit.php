@@ -59,16 +59,25 @@
                                 <td>COURSE</td>
                                 <td>
                                     <div class="input-group input-group-outline my-3" style="width: 300px;">
-                                        <input type="text" name="course" id="course" class="form-control" value="<?php echo ucfirst($records->course) ?>" required>
+                                        <select name="courseID" id="courseID" class="form-control">
+                                            <option value=""></option>
+                                            <?php foreach ($courses as $cour) { ?>
+                                                <option value="<?php echo $cour->courseID ?>" <?php if ($records->courseID == $cour->courseID) echo "selected" ?>><?php echo $cour->title ?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td>YEAR LEVEL</td>
                                 <td>
                                     <div class="input-group input-group-outline my-3" style="width: 300px;">
-                                        <input type="text" name="yr_lvl" id="yr_lvl" class="form-control" value="<?php echo ucfirst($records->yr_lvl) ?>" required>
+                                        <select name="yr_lvl" id="yr_lvl" class="form-control">
+                                            <option value=""></option>
+                                            <?php for ($i = 1; $i <= 4; $i++) { ?>
+                                                <option value="<?php echo $i ?>" <?php if ($records->yr_lvl == $i) echo "selected" ?>><?php echo $i ?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                 </td>
                             </tr>

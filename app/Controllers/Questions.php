@@ -11,12 +11,12 @@ class Questions extends BaseController
 
     public function __construct()
     {
-        $this->pfield                  = 'id';
+        $this->pfield                  = 'catID';
         $this->data['module_title']    = 'questions';
         $this->data['module_desc']     = 'Description';
         $this->data['current_page']    = $this->current_page =  site_url('questions');
         $this->module_path             = 'modules/questions/';
-        $this->builder                 = $this->table('questions');
+        $this->builder                 = $this->table('categories');
     }
 
     public function index()
@@ -43,12 +43,12 @@ class Questions extends BaseController
 
     public function save()
     {
-        $questionNo      = $this->request->getPost('questionNo');
-        $questionLabel     = $this->request->getPost('questionLabel');
+        $questionNo    = $this->request->getPost('questionNo');
+        $questionLabel = $this->request->getPost('questionLabel');
 
         $data = [
-            'questionNo'       => $questionNo,
-            'questionLabel'    => $questionLabel,
+            'catName'       => $questionNo,
+            'title' => $questionLabel,
         ];
 
         if ($this->builder->insert($data)) {
@@ -68,6 +68,11 @@ class Questions extends BaseController
         $this->builder->where($this->pfield, $id);
         $this->data['records'] = $this->builder->get()->getFirstRow();
 
+
+        $builder = $this->db->table('questions_details');
+        $builder->where('catID', $id);
+        $this->data['questions'] = $questions = $builder->get()->getResult();
+
         echo view('header', $this->data);
         echo view($this->module_path   . '/view');
         echo view('footer');
@@ -86,13 +91,13 @@ class Questions extends BaseController
 
     public function update()
     {
-        $id        = $this->request->getPost('id');
-        $questionNo      = $this->request->getPost('questionNo');
-        $questionLabel     = $this->request->getPost('questionLabel');
+        $id            = $this->request->getPost('id');
+        $questionNo    = $this->request->getPost('questionNo');
+        $questionLabel = $this->request->getPost('questionLabel');
 
         $data = [
-            'questionNo'       => $questionNo,
-            'questionLabel'    => $questionLabel,
+            'catName' => $questionNo,
+            'title'   => $questionLabel,
         ];
 
         $this->builder->set($data);
@@ -102,6 +107,43 @@ class Questions extends BaseController
             return redirect()->to($this->current_page . '/view/' . $id);
         } else {
             $this->setMessage('danger', 'Error updating account');
+            return redirect()->to($this->current_page);
+        }
+    }
+
+    public function delete_question($catID, $quesID)
+    {
+        $builder2 = $this->table('questions_details');
+        $builder2->where('quesID', $quesID);
+        if ($builder2->delete()) {
+            $this->setMessage('danger', 'Data successfully delated');
+            return redirect()->to($this->current_page . '/view/' . $catID);
+        } else {
+            $this->setMessage('danger', 'Error delating data');
+            return redirect()->to($this->current_page);
+        }
+    }
+
+    public function add()
+    {
+        $catID      = $this->request->getPost('catID');
+        $quesNo     = $this->request->getPost('quesNo');
+        $definition = $this->request->getPost('definition');
+
+        $data = [
+            'catID'      => $catID,
+            'quesNo'     => $quesNo,
+            'definition' => $definition,
+        ];
+
+        $builder2 = $this->table('questions_details');
+        if ($builder2->insert($data)) {
+            $id = $this->db->insertID();
+
+            $this->setMessage('success', 'Question added successfully');
+            return redirect()->to($this->current_page . '/view/' . $catID);
+        } else {
+            $this->setMessage('danger', 'Error adding question');
             return redirect()->to($this->current_page);
         }
     }

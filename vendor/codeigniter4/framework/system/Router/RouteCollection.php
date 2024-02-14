@@ -19,10 +19,10 @@ use Config\Modules;
 use Config\Routing;
 use Config\Services;
 use InvalidArgumentException;
-use Locale;
 
 /**
  * @todo Implement nested resource routing (See CakePHP)
+ * @see \CodeIgniter\Router\RouteCollectionTest
  */
 class RouteCollection implements RouteCollectionInterface
 {
@@ -301,7 +301,8 @@ class RouteCollection implements RouteCollectionInterface
 
         // Normalize the path string in routeFiles array.
         foreach ($this->routeFiles as $routeKey => $routesFile) {
-            $this->routeFiles[$routeKey] = realpath($routesFile) ?: $routesFile;
+            $realpath                    = realpath($routesFile);
+            $this->routeFiles[$routeKey] = ($realpath === false) ? $routesFile : $realpath;
         }
     }
 
@@ -317,6 +318,10 @@ class RouteCollection implements RouteCollectionInterface
         if ($this->didDiscover) {
             return $this;
         }
+
+        // Normalize the path string in routesFile
+        $realpath   = realpath($routesFile);
+        $routesFile = ($realpath === false) ? $routesFile : $realpath;
 
         // Include the passed in routesFile if it doesn't exist.
         // Only keeping that around for BC purposes for now.
@@ -555,11 +560,12 @@ class RouteCollection implements RouteCollectionInterface
     /**
      * Returns the raw array of available routes.
      *
-     * @param bool $includeWildcard Whether to include '*' routes.
+     * @param non-empty-string|null $verb
+     * @param bool                  $includeWildcard Whether to include '*' routes.
      */
     public function getRoutes(?string $verb = null, bool $includeWildcard = true): array
     {
-        if (empty($verb)) {
+        if ($verb === null || $verb === '') {
             $verb = $this->getHTTPVerb();
         }
 
@@ -990,7 +996,7 @@ class RouteCollection implements RouteCollectionInterface
      */
     public function match(array $verbs = [], string $from = '', $to = '', ?array $options = null): RouteCollectionInterface
     {
-        if (empty($from) || empty($to)) {
+        if ($from === '' || empty($to)) {
             throw new InvalidArgumentException('You must supply the parameters: from, to.');
         }
 
@@ -1150,6 +1156,10 @@ class RouteCollection implements RouteCollectionInterface
      */
     public function reverseRoute(string $search, ...$params)
     {
+        if ($search === '') {
+            return false;
+        }
+
         // Named routes get higher priority.
         foreach ($this->routesNames as $verb => $collection) {
             if (array_key_exists($search, $collection)) {
@@ -1258,8 +1268,7 @@ class RouteCollection implements RouteCollectionInterface
      *
      * @param string $search routeKey
      *
-     * @return array<int, string> filter_name or filter_name:arguments like 'role:admin,manager'
-     * @phpstan-return list<string>
+     * @return list<string> filter_name or filter_name:arguments like 'role:admin,manager'
      */
     public function getFiltersForRoute(string $search, ?string $verb = null): array
     {
@@ -1292,9 +1301,15 @@ class RouteCollection implements RouteCollectionInterface
             return '/' . ltrim($from, '/');
         }
 
-        // Build our resulting string, inserting the $params in
-        // the appropriate places.
-        foreach ($matches[0] as $index => $pattern) {
+        /**
+         * Build our resulting string, inserting the $params in
+         * the appropriate places.
+         *
+         * @var list<string> $patterns
+         */
+        $patterns = $matches[0];
+
+        foreach ($patterns as $index => $pattern) {
             if (! preg_match('#^' . $pattern . '$#u', $params[$index])) {
                 throw RouterException::forInvalidParameterType();
             }
@@ -1337,9 +1352,15 @@ class RouteCollection implements RouteCollectionInterface
             $locale = $params[$placeholderCount];
         }
 
-        // Build our resulting string, inserting the $params in
-        // the appropriate places.
-        foreach ($matches[0] as $index => $placeholder) {
+        /**
+         * Build our resulting string, inserting the $params in
+         * the appropriate places.
+         *
+         * @var list<string> $placeholders
+         */
+        $placeholders = $matches[0];
+
+        foreach ($placeholders as $index => $placeholder) {
             if (! isset($params[$index])) {
                 throw new InvalidArgumentException(
                     'Missing argument for "' . $placeholder . '" in route "' . $from . '".'
@@ -1668,8 +1689,7 @@ class RouteCollection implements RouteCollectionInterface
     /**
      * Load routes options based on verb
      *
-     * @return array<string, array<string, array|int|string>> [routeKey(or from) => [key => value]]
-     * @phpstan-return array<
+     * @return array<
      *     string,
      *     array{
      *         filter?: string|list<string>, namespace?: string, hostname?: string,
@@ -1680,7 +1700,7 @@ class RouteCollection implements RouteCollectionInterface
      */
     protected function loadRoutesOptions(?string $verb = null): array
     {
-        $verb = $verb ?: $this->getHTTPVerb();
+        $verb ??= $this->getHTTPVerb();
 
         $options = $this->routesOptions[$verb] ?? [];
 
@@ -1717,8 +1737,7 @@ class RouteCollection implements RouteCollectionInterface
      *
      * @param string|null $verb HTTP verb. `'*'` returns all controllers in any verb.
      *
-     * @return array<int, string> controller name list
-     * @phpstan-return list<string>
+     * @return list<string> controller name list
      */
     public function getRegisteredControllers(?string $verb = '*'): array
     {

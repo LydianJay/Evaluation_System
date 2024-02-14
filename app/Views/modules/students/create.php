@@ -56,7 +56,12 @@
                                 <td>COURSE</td>
                                 <td>
                                     <div class="input-group input-group-outline my-3" style="width: 300px;">
-                                        <input type="text" name="course" id="course" class="form-control">
+                                        <select name="courseID" id="courseID" class="form-control">
+                                            <option value=""></option>
+                                            <?php foreach ($courses as $cour) { ?>
+                                                <option value="<?php echo $cour->courseID ?>"><?php echo $cour->title ?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                 </td>
                             </tr>
@@ -64,7 +69,12 @@
                                 <td>YEAR LEVEL</td>
                                 <td>
                                     <div class="input-group input-group-outline my-3" style="width: 300px;">
-                                        <input type="text" name="yr_lvl" id="yr_lvl" class="form-control">
+                                        <select name="yr_lvl" id="yr_lvl" class="form-control">
+                                            <option value=""></option>
+                                            <?php for ($i = 1; $i <= 4; $i++) { ?>
+                                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                 </td>
                             </tr>
