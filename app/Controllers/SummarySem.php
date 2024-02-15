@@ -17,7 +17,7 @@ class SummarySem extends BaseController {
         $this->builder = $this->table('ballot');
         $this->footerData['app_yr']         = 2024;
         $this->footerData['app_owner']      = 'LydianJay';
-        $this->footerData['app_title']         = 'Evaluation';
+        $this->footerData['app_title']      = 'Evaluation';
         
     }
     
@@ -26,10 +26,13 @@ class SummarySem extends BaseController {
         $data['module_title'] = 'summarysem';
         
         $fID = $this->request->getPost('fName');
+
         
         $data['selectedID'] = $this->db->table('faculty')->select('id, fname, lname')->where('id', $fID)->get()->getRow();
+        
+        
 
-        echo ( empty($fID) ) ? 'fuck' : 'shit';
+
 
         $facultyTbl = $this->db->table('faculty');
         $facultyTbl->select('id, fname, lname');
@@ -37,9 +40,12 @@ class SummarySem extends BaseController {
         $fRes = $facultyTbl->get()->getResult();
         $data['fnames'] = $fRes;
 
+
+
         $ballotTbl = $this->db->table('ballot');
         $ballotTbl->select('SUM(ballot.rating) AS sum, ballot.evaluationID AS evalID, COUNT(ballot.rating) as no');
         $ballotTbl->join('evaluations', 'ballot.evaluationID = evaluations.id');
+        $ballotTbl->where('facultyID', $fID);
         $ballotTbl->orderBy('evaluations.id');
         $res = $ballotTbl->get()->getResult();
         $data['query'] = $res;
@@ -49,11 +55,6 @@ class SummarySem extends BaseController {
         $eval->orderBy('evalOrder');
         $resEval = $eval->get()->getResult();
         $data['evalrow'] = $resEval;
-
-        // debug below
-        /*foreach ($res as $row) {
-            echo $row->evalID.' '.$row->sum.'<br>';
-        }*/
        
 
         echo view('header', $data);

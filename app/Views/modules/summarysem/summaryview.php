@@ -27,12 +27,22 @@
             </div>
             <div class="col-4">
                 <form action="<?php echo $current_page ?>" method="POST">
-                    <select name="facultyName" id="fName" class="form-control select2 w-50" required>
+                    <select name="fName" id="fName" class="form-control select2 w-50" required>
                         
                         <?php
                             foreach ($fnames as $fname) {
                         ?>
-                        <option value="<?php echo $fname->id ?>" <?php if ( $selectedID->id == $fname->id) echo 'selected' ?>><?php echo $selectedID->fname ?> </option>
+                        <option value="<?php echo $fname->id ?>" <?php  
+                            if(isset($selectedID)) {
+                                if ( $selectedID->id == $fname->id) echo 'selected';
+                            }
+                            
+                            
+                        ?>>
+                            <?php 
+                               echo $fname->fname." ".$fname->lname;
+                            ?> 
+                        </option>
                         <?php }?>
                     </select>
 
@@ -53,7 +63,7 @@
 
         <div class="row my-2">
             <div class="col">
-                <table class="table border-dark">
+                <table class="table border-dark" id = "dataTable">
                     <thead>
                         <tr>
                             <th></th>
@@ -69,13 +79,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="text-center">Count</td>
+                            <td class="text-center">Average per Sem</td>
                             <?php
                                 foreach ($evalrow as $evalinfo){
                                     $isEmpty = true;
                                     foreach($query as $row){
                                         if($row->evalID == $evalinfo->id){
-                                            echo "<td class='text-center'>".$row->sum."</td>";
+                                            $average = $row->sum / $row->no * 5;
+                                            echo "<td class='text-center'>".$average."</td>";
                                             $isEmpty = false;
                                             break;
                                         }
@@ -90,21 +101,21 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td class="text-center">Average</td>
+                            <td class="text-center">Average Rating</td>
                             <?php
                                 foreach ($evalrow as $evalinfo){
                                     $isEmpty = true;
                                     
-                                    foreach($query as $row){
+                                    foreach($query as $row) {
                                         if($row->evalID == $evalinfo->id) {
-                                            $average = $row->sum / $row->no * 5;
+                                            $average = $row->sum / $row->no * 5 / 5;
                                             echo "<td class='text-center'>".number_format((float)$average, 2, '.', '')."</td>";
                                             $isEmpty = false;
                                             break;
                                         }
     
                                     }
-                                    if($isEmpty){
+                                    if($isEmpty) {
                                         echo "<td class='text-center'>N/A</td>";
                                     }
                                 }
@@ -121,3 +132,43 @@
 
 </main>
 
+
+
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            dom: 'Bfrtip',
+            searching: false,
+            buttons: [{
+                    extend: 'print',
+                    footer: true,
+                    customize: function(win) {
+                        // Add your logo on the right side of the title in the header
+                        var logoHtml = '<div style="text-align: center;">' +
+                            '<img src="<?php echo base_url() ?>/assets/img/logos/snsu.png" alt="Logo" style="width: 80px; display: inline-block;">' +
+                            '<h3 style="display: inline-block; margin-right: 10px;">SNSU EVALUATION</h3>' +
+                            '</div>';
+
+                        $(win.document.body).find('table').before(logoHtml);
+                    },
+                },
+                {
+                    extend: 'pdfHtml5',
+                    header: true,
+                    footer: true,
+                    title: 'Semester Evaluation',
+                    orientation: 'portrait',
+                    pageSize: 'LETTER',
+                    download: 'open',
+                    customize: function(doc) {
+                        doc.layout = 'lightHorizontalLines';
+                        doc.pageMargins = [30, 30, 30, 30];
+                        doc.defaultStyle.fontSize = 12;
+                        doc.styles.tableHeader.fontSize = 12;
+                        doc.styles.title.fontSize = 14;
+                    }
+                }
+            ],
+        });
+    });
+</script>
