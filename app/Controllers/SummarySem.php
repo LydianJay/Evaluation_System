@@ -18,6 +18,7 @@ class SummarySem extends BaseController {
         $this->footerData['app_yr']         = 2024;
         $this->footerData['app_owner']      = 'LydianJay';
         $this->footerData['app_title']      = 'Evaluation';
+        $this->footerData['app_title']      = 'Evaluation';
         
     }
     
