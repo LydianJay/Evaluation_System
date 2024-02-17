@@ -9,8 +9,7 @@ class Studenteval extends BaseController
     private $module_path;
     private $builder;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->pfield                  = 'id';
         $this->data['module_title']    = 'studenteval';
         $this->data['module_desc']     = 'Description';
@@ -19,159 +18,48 @@ class Studenteval extends BaseController
         $this->builder                 = $this->table('students');
     }
 
-    public function index()
-    {
+    public function index() {
         $this->list();
     }
 
-    public function list()
-    {
+    public function list() {
         $data  = $this->data;
-
-        $condition_fields = array(
-            array(
-                'variable'      => 'courseID',
-                'field'         => "courseID",
-                'default_value' => "",
-                'operator'      => 'where'
-            ),
-            array(
-                'variable'      => 'evaluationID',
-                'field'         => 'evaluationID',
-                'default_value' => "",
-                'operator'      => 'where'
-            ),
-            array(
-                'variable'      => 'subjectID',
-                'field'         => 'subjectID',
-                'default_value' => "",
-                'operator'      => 'where'
-            ),
-        );
-
-        //get the controller
         $controller = service('uri')->getSegment(2);
-
-        // start source of filtering
-        $filter_source = 0;  // default/blank
-        if ($this->request->getPost('filterflag') || $this->request->getPost('sortby')) {
-            $filter_source = 1;
-        } else {
-            foreach ($condition_fields as $key) {
-                if ($this->request->getPost($key['variable'])) {
-                    $filter_source = 1;  // form filters
-                    break;
-                }
-            }
-        }
-
-        if (!$filter_source) {
-            foreach ($condition_fields as $key) {
-                if ($this->session->get($controller . '_' . $key['variable']) || $this->session->get($controller . '_sortby') || $this->session->get($controller . '_sortorder')) {
-                    $filter_source = 2;  // session
-                    break;
-                }
-            }
-        }
-
-        switch ($filter_source) {
-            case 1:
-                foreach ($condition_fields as $key) {
-                    ${$key['variable']} = $this->request->getPost($key['variable']);
-                }
-
-                break;
-            case 2:
-                foreach ($condition_fields as $key) {
-                    ${$key['variable']} = $this->session->get($controller . '_' . $key['variable']);
-                }
-
-                break;
-            default:
-                foreach ($condition_fields as $key) {
-                    ${$key['variable']} = $key['default_value'];
-                }
-        }
-
-        // set session variables
-        foreach ($condition_fields as $key) {
-            $this->session->set($controller . '_' . $key['variable'], ${$key['variable']});
-        }
         
+        $data['sFaculty']   = $this->request->getPost('facultyField'); 
+        $data['sTerm']      = $this->request->getPost('termField');
+        $data['sSubject']   = $this->request->getPost('subjectField');
+        $data['sYear']      = $this->request->getPost('yearField');
 
-        $groupedRecords = array();
-        if ($courseID && $evaluationID) {
-            $students = $this->db->table('students');
-            $students->select('students.*, blocksections_details.*, courses.title as course_title, subjects.title as subject_title');
+        // ==============================================
+        $data['tblFaculty'] = $this->db->table('faculty')->select('fname, lname, id')->get()->getResult();
+        $data['tblEval']    = $this->db->table('evaluations')->select('id, name, acadYear, term')->get()->getResult();
+        $data['tblSubject'] = $this->db->table('subjects')->select('subID, title')->get()->getResult();
+        $data['tblCat']     = $this->db->table('categories')->select('catName, catID')->get()->getResult();        
+        $data['noCat']      = count($data['tblCat']);
+
+        if ( 
+            isset($data['sFaculty']) && isset($data['sTerm']) &&
+            isset($data['sSubject']) && isset($data['sYear'])
+        ) {
+
+            $filtered = $this->db->table('ballot')->select('SUM(ballot.rating) as rating, ballot.catID as catID, ballot.studentID as studentID');
+            $filtered->join(    'evaluations',             'ballot.evaluationID = evaluations.id', 'right');
+            $filtered->where('ballot.facultyID', $data['sFaculty']);
+            $filtered->where('evaluations.term', $data['sTerm']);
+            $filtered->where('evaluations.acadYear', $data['sYear']);
+            $filtered->where('ballot.subID', $data['sSubject']);
+            $filtered->groupBy(['ballot.catID', 'ballot.studentID']);
+            $filtered->orderBy('ballot.catID, ballot.studentID');
+            $data['ratings'] = $filtered->get()->getResult();
+            // RAW SQL: SELECT SUM(ballot.rating), ballot.catID, ballot.studentID FROM ballot WHERE facultyID = 84 AND ballot.subID = 33 GROUP BY ballot.catID, ballot.studentID ORDER BY  ballot.catID
+           
+        }
+
             
-            $students->join('blocksections_details', 'blocksections_details.studentID = students.id', 'left');
-            $students->join('courses', 'courses.courseID = students.courseID', 'left');
-            $students->join('subjects', 'subjects.subID = blocksections_details.subID', 'left');
-            $students->where('students.courseID', $courseID);
-            $students->where('subjects.subID', $subjectID);
-            $students->groupBy(['students.idno', 'subID']);
-            $students->orderBy('students.idno');
-            $getStud = $students->get()->getResult();
-            // ...
-
-            foreach ($getStud as $stud) {
-                // Retrieve ballot information
-                $builder = $this->db->table('ballot');
-                $builder->select('SUM(rating) as total_rating, id, catID');
-                $builder->where('studentID', $stud->idno);
-                $builder->where('subID', $stud->subID);
-                $builder->where('courseID', $stud->courseID);
-                $builder->where('evaluationID', $evaluationID);
-                $builder->groupBy(['studentID', 'subID', 'catID']); // Include 'studentID' and 'subID' in grouping
-                $builder->orderBy('catID', 'asc');
-                $recordings = $builder->get()->getResult();
-
-                // Check if records are found
-                if ($recordings) {
-                    // Use a unique key for each student and subject combination
-                    $groupedRecords[$stud->id . '_' . $stud->subID] = $stud;
-                    $groupedRecords[$stud->id . '_' . $stud->subID]->cat1 = 0;
-                    $groupedRecords[$stud->id . '_' . $stud->subID]->cat2 = 0;
-                    $groupedRecords[$stud->id . '_' . $stud->subID]->cat3 = 0;
-                    $groupedRecords[$stud->id . '_' . $stud->subID]->cat4 = 0;
-
-                    // Populate category ratings for each student and subject combination
-                    foreach ($recordings as $recording) {
-                        $catID = 'cat' . $recording->catID;
-                        $groupedRecords[$stud->id . '_' . $stud->subID]->$catID = $recording->total_rating;
-                    }
-                }
-            }
-        }
-
-        $data['records'] = $groupedRecords;
-
-        $courses = $this->db->table('courses');
-        $courses->orderBy('title', 'asc');
-        $data['courses'] = $courses->get()->getResult();
-
-        $evaluations = $this->db->table('evaluations');
-        $evaluations->orderBy('name', 'asc');
-        $data['evaluations'] = $evaluations->get()->getResult();
-
-        $subjects = $this->db->table('subjects');
-        $subjects->orderBy('subCode', 'asc');
-        $data['subjects'] = $subjects->get()->getResult();
-        $data['subID'] = $subjects->getWhere(['subID' => $subjectID], 1);
-
-        $faculty = $this->db->table('faculty');
-        $faculty->orderBy('fname', 'asc');
-        $faculty->distinct();
-        $data['faculty'] = $faculty->get()->getResult();
 
 
-        $data['getEval']    = $evaluations->where('id', $evaluationID)->get()->getRow();
-        $data['getCourse']  = $courses->where('courseID', $courseID)->get()->getRow();
-        $data['getSub']      = $subjects->where('subID', $subjectID)->get()->getRow();
-        
-        $data['courseID']     = $courseID;
-        $data['evaluationID'] = $evaluationID;
-        $data['noOfStud']     = count($groupedRecords);
+
 
         echo view('header', $data);
         echo view($this->module_path   . '/list');
