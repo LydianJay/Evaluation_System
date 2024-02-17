@@ -95,6 +95,22 @@
                                         
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <p class="h4 text-center">Faculty:</p>
+                                        </div>
+
+                                        <div class="col">
+                                            <select name="facultyField" id="facultyField" class="form-control select2 w-50" required>
+                                                <option value=""></option>
+                                                <?php foreach ($subjects as $sub) { ?>
+                                                    <option value="<?php echo $sub->subID ?>" <?php if ($subID == $sub->subID) echo 'selected' ?>><?php echo $sub->title ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                        
+                                    </div>
+
                                     
 
                                     <div class="row">
