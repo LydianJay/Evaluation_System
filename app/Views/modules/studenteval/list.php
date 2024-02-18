@@ -151,7 +151,7 @@
 
         <div class="row mt-5">
             <div class="col">
-                <p class="h4 text-center">Evaluation Per Program</p>
+                <p class="h4 text-center">Evaluation Per Subject</p>
             </div>
         </div>
 
@@ -181,34 +181,44 @@
                             $no = 1;
                             $ave = array_fill(0,$noCat,0);
                             $counter = 0;
-                            
-                            foreach($tblCat as $cat) {
+                            if(isset($ratings)){
+                                foreach($tblCat as $cat) {
                             
                         ?>        
                         <tr>
                             <?php
-                                echo "<td class='text-center'>".$no."</td>";
-                                foreach($ratings as $rating) {
-                                    if($cat->catID == $rating->catID) {
-                                        $ave[$cat->catID - 1] += $rating->rating;
+                                    echo "<td class='text-center'>".$no."</td>";
+                                    
+                                    foreach($ratings as $rating) {
+                                        if($cat->catID == $rating->catID) {
+                                            
                             ?>
 
                             <td class ="text-center">
                                 <?php
-                                        //echo $rating->rating."-".$cat->catID;
-                                        echo /*$ratings[$noCat * ($cat->catID-1) + $counter]->rating."-".*/ (  ($counter * $noCat) );
-                                        $counter++;
-                                    }
+                                            
+                                            
+                                            $index = (  (($counter % $noCat) * $noCat) + ($cat->catID - 1)  );
+                                            echo $ratings[$index]->rating;
+                                            $ave[$cat->catID - 1] += $ratings[$counter]->rating;
+                                            $counter++;
+                                        }
 
 
                                 ?>
                             </td>
 
                             <?php 
-                                }
+                                    }
                             ?>
                         </tr>
-                        <?php  $no++; }?>
+                        
+                        <?php  
+                                    $no++; 
+                                }
+                            }
+                            
+                        ?>
 
 
                     </tbody>

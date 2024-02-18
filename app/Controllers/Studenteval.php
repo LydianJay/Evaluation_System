@@ -43,7 +43,7 @@ class Studenteval extends BaseController
             isset($data['sSubject']) && isset($data['sYear'])
         ) {
 
-            $filtered = $this->db->table('ballot')->select('SUM(ballot.rating) as rating, ballot.catID as catID, ballot.studentID as studentID');
+            $filtered = $this->db->table('ballot')->select('SUM(ballot.rating) as rating, ballot.catID as catID, ballot.studentID as studentID, COUNT(ballot.studentID) as sCount');
             $filtered->join(    'evaluations',             'ballot.evaluationID = evaluations.id', 'right');
             $filtered->where('ballot.facultyID', $data['sFaculty']);
             $filtered->where('evaluations.term', $data['sTerm']);
