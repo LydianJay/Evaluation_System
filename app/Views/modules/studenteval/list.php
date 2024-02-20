@@ -87,7 +87,7 @@
 
             <div class="row mt-1">
                 <div class="col-2 ms-3">
-                    <p class="h4 text-end">Subject:</p>                
+                    <p class="h4 text-end">Course:</p>                
                 </div>
                 <div class="col-3">
 
@@ -230,7 +230,7 @@
                             ?>
                             <th class="text-center">
                                 <?php
-                                    echo $ave[$var];
+                                    echo $ave[$var] / $ratings[0]->sCount;
                                 ?>
                             </th>
 
