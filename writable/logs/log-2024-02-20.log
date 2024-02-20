@@ -12,3 +12,20 @@ INFO - 2024-02-20 14:59:06 --> Session: Class initialized using 'CodeIgniter\Ses
 INFO - 2024-02-20 14:59:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 INFO - 2024-02-20 15:01:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 INFO - 2024-02-20 15:01:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-02-20 15:02:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2024-02-20 15:02:42 --> ErrorException: Undefined array key 0
+in APPPATH\Views\modules\studenteval\list.php on line 233.
+ 1 APPPATH\Views\modules\studenteval\list.php(233): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key 0', 'C:\\xampp\\htdocs\\evaluation_system\\app\\Views\\modules\\studenteval\\list.php', 233)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\xampp\\htdocs\\evaluation_system\\app\\Views\\modules\\studenteval\\list.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1178): CodeIgniter\View\View->render('modules/studenteval//list', [], true)
+ 5 APPPATH\Controllers\Studenteval.php(65): view('modules/studenteval//list')
+ 6 APPPATH\Controllers\Studenteval.php(22): App\Controllers\Studenteval->list()
+ 7 SYSTEMPATH\CodeIgniter.php(941): App\Controllers\Studenteval->index()
+ 8 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Studenteval))
+ 9 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2024-02-20 15:02:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-02-20 15:03:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-02-20 15:03:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-02-20 15:03:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
