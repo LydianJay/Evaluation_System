@@ -86,7 +86,7 @@
                                     foreach($query as $row){
                                         if($row->evalID == $evalinfo->id){
                                             $average = $row->sum / $row->no * 5;
-                                            echo "<td class='text-center'>".$average."</td>";
+                                            echo "<td class='text-center'>".number_format((float)$average, 2, '.', '')."</td>";
                                             $isEmpty = false;
                                             break;
                                         }

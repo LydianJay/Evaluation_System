@@ -206,7 +206,7 @@
                                     // =======================================================
 
                                     $res = $rating->rating / ($rating->num / 5); 
-                                    echo $res;
+                                    echo round($res, 2);
                                     $sum += $res;
                             ?>     
                                 </p>
@@ -220,7 +220,7 @@
                             
                             <th class="text-center">
                                 <p class="h6">
-                                    <?php echo $sum; ?>
+                                    <?php echo round($sum, 2); ?>
                                 </p>
                             </th>
                         </tr>
@@ -269,31 +269,19 @@
                     extend: 'print',
                     footer: true,
                     customize: function(win) {
-                        // Add your logo on the right side of the title in the header
-                        var logoHtml = '<div style="text-align: center; padding-bottom: 30px;">' +
+                       
+                        var logoHtml = 
+                            '<div style="text-align: center; padding-bottom: 30px;">' +
                             '<img src="<?php echo base_url() ?>/assets/img/logos/snsu.png" alt="Logo" style="width: 80px; display: inline-block;">' +
                             '<h3 style="display: inline-block; margin-right: 10px;">SNSU EVALUATION</h3>' +
                             '</div>';
 
                         $(win.document.body).find('table').before(logoHtml);
+
+
                     },
                 },
-                {
-                    extend: 'pdfHtml5',
-                    header: true,
-                    footer: true,
-                    title: 'Semester Evaluation',
-                    orientation: 'portrait',
-                    pageSize: 'LETTER',
-                    download: 'open',
-                    customize: function(doc) {
-                        doc.layout = 'lightHorizontalLines';
-                        doc.pageMargins = [30, 30, 30, 30];
-                        doc.defaultStyle.fontSize = 18;
-                        doc.styles.tableHeader.fontSize = 20;
-                        doc.styles.title.fontSize = 24;
-                    }
-                }
+                
             ],
         });
     });
