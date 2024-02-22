@@ -157,7 +157,7 @@
 
         <div class="row mt-5">
             <div class="col">
-                <table class="table table-bordered border-dark" id = "dataTable">
+                <table class="table border-dark" id = "dataTable">
                     <thead>
                         <tr>
                             
@@ -178,19 +178,19 @@
                     <tbody>
 
                         <?php 
-                            $no = 1;
                             $ave = array_fill(0,$noCat,0);
                             $counter = 0;
                             if(isset($ratings)){
-                                foreach($tblCat as $cat) {
+                                $noStudents = $ratings[0]->sCount;
+                                for($y = 0; $y < $noStudents; $y++) {
                             
                         ?>        
                         <tr>
                             <?php
-                                    echo "<td class='text-center'>".$no."</td>";
+                                    echo "<td class='text-center'>".($y+1)."</td>";
                                     
-                                    foreach($ratings as $rating) {
-                                        if($cat->catID == $rating->catID) {
+                                    for($x = 0; $x < $noCat; $x++) {
+                                         
                                             
                             ?>
 
@@ -198,11 +198,10 @@
                                 <?php
                                             
                                             
-                                            $index = (  (($counter % $noCat) * $noCat) + ($cat->catID - 1)  );
-                                            echo $ratings[$index]->rating;
-                                            $ave[$cat->catID - 1] += $ratings[$counter]->rating;
-                                            $counter++;
-                                        }
+                                        $value = $ratings[$x + $y * $noCat]->rating;
+                                        echo $value;
+                                        
+                                        $ave[$x] += $value;
 
 
                                 ?>
@@ -214,7 +213,6 @@
                         </tr>
                         
                         <?php  
-                                    $no++; 
                                 }
                             }
                             
@@ -232,8 +230,8 @@
                                 <?php
                                     if(isset($ratings)){
                                         if(count($ratings) > 0){
-                                            echo $ave[$var] / $ratings[0]->sCount;
-    
+                                            
+                                            echo round($ave[$var] / $noStudents, 4);
                                         }
                                     }
                                 ?>
