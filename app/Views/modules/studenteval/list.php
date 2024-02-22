@@ -230,9 +230,11 @@
                             ?>
                             <th class="text-center">
                                 <?php
-                                    if(count($ratings) > 0){
-                                        echo $ave[$var] / $ratings[0]->sCount;
-
+                                    if(isset($ratings)){
+                                        if(count($ratings) > 0){
+                                            echo $ave[$var] / $ratings[0]->sCount;
+    
+                                        }
                                     }
                                 ?>
                             </th>
