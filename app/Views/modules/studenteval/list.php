@@ -180,8 +180,10 @@
                         <?php 
                             $ave = array_fill(0,$noCat,0);
                             $counter = 0;
+
                             if(isset($ratings)){
-                                $noStudents = $ratings[0]->sCount;
+                                $arrayCount = count($ratings);
+                                $noStudents = $arrayCount / $noCat;
                                 for($y = 0; $y < $noStudents; $y++) {
                             
                         ?>        
@@ -197,8 +199,8 @@
                             <td class ="text-center">
                                 <?php
                                             
-                                            
-                                        $value = $ratings[$x + $y * $noCat]->rating;
+                                        //$value = $x + $y * $noCat;
+                                        $value = $ratings[ $x + $y * $noCat]->rating;
                                         echo $value;
                                         
                                         $ave[$x] += $value;

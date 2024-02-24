@@ -50,7 +50,7 @@ class Studenteval extends BaseController
             $filtered->where('evaluations.acadYear', $data['sYear']);
             $filtered->where('ballot.subID', $data['sSubject']);
             $filtered->groupBy(['ballot.catID', 'ballot.studentID']);
-            $filtered->orderBy('ballot.studentID');
+            $filtered->orderBy('ballot.studentID, ballot.catID');
             $data['ratings'] = $filtered->get()->getResult();
             // RAW SQL: SELECT SUM(ballot.rating), ballot.catID, ballot.studentID FROM ballot WHERE facultyID = 84 AND ballot.subID = 33 GROUP BY ballot.catID, ballot.studentID ORDER BY  ballot.catID
            
@@ -63,7 +63,7 @@ class Studenteval extends BaseController
 
         echo view('header', $data);
         echo view($this->module_path   . '/list');
-        echo view('footer');
+      //  echo view('footer');
     }
 
     public function create()
