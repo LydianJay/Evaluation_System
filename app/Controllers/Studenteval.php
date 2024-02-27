@@ -63,7 +63,7 @@ class Studenteval extends BaseController
 
         echo view('header', $data);
         echo view($this->module_path   . '/list');
-      //  echo view('footer');
+        echo view('footer');
     }
 
     public function create()

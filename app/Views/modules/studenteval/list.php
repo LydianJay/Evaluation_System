@@ -29,7 +29,7 @@
         </div>
     </nav>
     <!-- End Navbar -->
-    <div class="container-fluid py-4">
+    <div class="container-fluid py-4" id = "pdfContent">
         <form action="<?php echo $current_page ?>" method="post">
             <div class="row mt-5">
                 <div class="col-2 ms-3">
@@ -147,6 +147,10 @@
             </div>
         </form>
     
+
+
+       
+
         
 
         <div class="row mt-5">
@@ -249,46 +253,33 @@
             </div>
         </div>
 
+        
+        <div class="container mt-5" id = "printButton">
+            <button class="btn btn-info align-middle">PRINT / PDF</button>
+        </div>
 
     </div>
 
         
-</main>
+
 <script>
     $(document).ready(function() {
-        $('#dataTable').DataTable({
-            dom: 'Bfrtip',
-            searching: false,
-            buttons: [{
-                    extend: 'print',
-                    footer: true,
-                    customize: function(win) {
-                        // Add your logo on the right side of the title in the header
-                        var logoHtml = '<div style="text-align: center;">' +
-                            '<img src="<?php echo base_url() ?>/assets/img/logos/snsu.png" alt="Logo" style="width: 80px; display: inline-block;">' +
-                            '<h3 style="display: inline-block; margin-right: 10px;">SNSU EVALUATION</h3>' +
-                            '</div>';
 
-                        $(win.document.body).find('table').before(logoHtml);
-                    },
-                },
-                {
-                    extend: 'pdfHtml5',
-                    header: true,
-                    footer: true,
-                    title: 'Evaluation',
-                    orientation: 'portrait',
-                    pageSize: 'LETTER',
-                    download: 'open',
-                    customize: function(doc) {
-                        doc.layout = 'lightHorizontalLines';
-                        doc.pageMargins = [30, 30, 30, 30];
-                        doc.defaultStyle.fontSize = 12;
-                        doc.styles.tableHeader.fontSize = 12;
-                        doc.styles.title.fontSize = 14;
-                    }
-                }
-            ],
+        
+        $('#printButton').click(function(){
+
+            let elem = document.getElementById('pdfContent');
+
+            let copy = elem.cloneNode(true);
+            
+            
+            copy.removeChild(copy.firstElementChild);
+            copy.removeChild(copy.lastElementChild);
+            html2pdf(copy);
+
+           
         });
+
+
     });
 </script>
