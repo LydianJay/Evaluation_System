@@ -255,7 +255,7 @@
 
         
         <div class="container mt-5" id = "printButton">
-            <button class="btn btn-info align-middle">PRINT / PDF</button>
+            <button class="btn btn-info align-middle">DOWNLOAD PDF</button>
         </div>
 
     </div>
