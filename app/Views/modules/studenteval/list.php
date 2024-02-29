@@ -203,7 +203,7 @@
                             <td class ="text-center">
                                 <?php
                                             
-                                        //$value = $x + $y * $noCat;
+                                        
                                         $value = $ratings[ $x + $y * $noCat]->rating;
                                         echo $value;
                                         
