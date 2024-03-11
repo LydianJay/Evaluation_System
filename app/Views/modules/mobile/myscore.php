@@ -19,12 +19,12 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-        <div class="row">
+        <div class="row" id = "pdfContent">
             <div class="col-12 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-body">
                         <form action="<?php echo $current_page . '/save' ?>" method="post">
-                            <h4><?php echo ucfirst($records->fname) . ' ' .  ucfirst($records->mname) . ' ' . ucfirst($records->lname) ?></h4>
+                            <h4 id ="fName"><?php echo ucfirst($records->fname) . ' ' .  ucfirst($records->mname) . ' ' . ucfirst($records->lname) ?></h4>
                             <span><?php echo ucfirst($records->position) ?></span>
                             <table class="table table-bordered table-sm mt-5">
                                 <tbody>
@@ -85,4 +85,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="container" id = "saveAs">
+            <button class="btn btn-info align-middle">DOWNLOAD PDF</button>
         </div>

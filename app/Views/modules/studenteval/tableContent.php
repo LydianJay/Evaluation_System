@@ -94,9 +94,11 @@
     </div>
 
 
-    <div class="container mt-5" id = "saveAs">
-        <button class="btn btn-info align-middle">DOWNLOAD PDF</button>
-    </div>
+    
 
 
+</div>
+
+<div class="container" id = "saveAs">
+    <button class="btn btn-info align-middle">DOWNLOAD PDF</button>
 </div>

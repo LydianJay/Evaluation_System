@@ -9,11 +9,10 @@ $(document).ready(function() {
         
 
         let elem = document.getElementById('pdfContent');
-
+        console.log("printing");
 
         let fname = document.getElementById('fName').textContent;
-        let fileName = fname.concat('-CourseEvaluation.pdf');
-        
+        let fileName = fname.concat('.pdf');
 
         var opt = {
             margin:       0,

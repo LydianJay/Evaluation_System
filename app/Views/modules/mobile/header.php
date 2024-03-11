@@ -84,6 +84,14 @@
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="<?php echo base_url() ?>/assets/js/material-dashboard.min.js?v=3.0.5"></script>
 
+
+     <!-- html2pdf -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <!-- custom download pdf function  -->
+    <script src="<?php echo base_url() ?>/custom/printing.js"></script>
+
     <style>
         .dataTables_wrapper .dataTables_paginate .paginate_button {
             padding: 0px;
