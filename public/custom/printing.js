@@ -20,6 +20,7 @@ $(document).ready(function() {
             pagebreak:    { mode: ['css', 'legacy'] },
             filename:     fileName,
             image:        { type: 'png' },
+            html2canvas:  { scale: 1, scrollY: 0 },
             jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
         
