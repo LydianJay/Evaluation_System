@@ -16,7 +16,7 @@ $(document).ready(function() {
 
         var opt = {
             margin:       0,
-            pagebreak:    { mode: ['css', 'legacy'] },
+            pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] },
             filename:     fileName,
             image:        { type: 'png' },
             html2canvas:  { scale: 2, scrollY: 0, scrollX: 0 },

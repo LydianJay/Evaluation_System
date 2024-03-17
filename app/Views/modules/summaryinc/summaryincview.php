@@ -15,16 +15,7 @@
     </nav>
 
 
-
-
-    <div class="container-fluid py-4">
-
-        <div class="row pt-5">
-            <div class="col-12">
-                <p class="h3 text-center">TEACHING EFFECTIVENESS EVALUATION</p>
-            </div>
-        </div>
-
+    <div class="container-fluid">
         <form action="<?php echo $current_page ?>" method="post">
 
             <div class="row mt-5">
@@ -71,13 +62,13 @@
 
             <div class="row">
                 <div class="col-2 ms-3">
-                    <p class="h4 text-end">Professor:</p>
+                    <p class="h4 text-end" id="fName">Professor:</p>
                     
                 </div>
                 <div class="col-3">
 
-                    <select name="profField" id="profField" class="form-control select2 w-50">
-                                          
+                    <select name="profField" id="profField" class="form-control select2 w-50" >
+                                        
                         <?php
                             foreach ($facultyTbl as $fac) {
                         ?>
@@ -121,30 +112,42 @@
                     </select>
                 </div>
             </div>
-            
+
 
             <div class="row">
                 <div class="col">
                     <div class="container mt-5" style="width: fit-content;">
                         <button class="btn btn-primary" type = "submit">Filter</button>
-
                     </div>
                 </div>
             </div>
-
         </form>
+    </div>
 
-        
+    <div class="container-fluid" id="pdfContent">
+        <div class="container-fluid d-flex flex-column justify-content-center">
+            <img src= "<?php echo base_url().'assets/img/logos/snsu.png' ?>" alt="snsu logo" style = "width:200px; height: 200px; margin: auto;">
+        </div>
+        <div class="container-fluid mb-5">
+            
+            <p class="h2 text-center">Surigao Del Norte State University</p>
+        </div>
+
 
         <div class="row">
-            <div class="col">
-                <p class="h3 text-center mt-5">Student Evaluation</p>
+            <div class="col-12">
+                <p class="h4 text-center">TEACHING EFFECTIVENESS EVALUATION</p>
             </div>
         </div>
+
+        
+        
+
+       
         
         <div class="row">
             <div class="col">
-                <p class="h5 text-center my-2">Average Rating per Semester</p>
+                <p class="h5 text-center mt-2">Average Rating per Semester</p>
             </div>
         </div>
 
@@ -253,36 +256,13 @@
         </div>
 
     </div>
+    <div class="row">
+        <div class="container" id = "saveAs">
+            <button class="btn btn-info align-middle">DOWNLOAD PDF</button>
+        </div>
+    </div>
+
 
 
 
 </main>
-
-
-
-<script>
-    $(document).ready(function() {
-        $('#docu').DataTable({
-            dom: 'Bfrtip',
-            searching: false,
-            buttons: [{
-                    extend: 'print',
-                    footer: true,
-                    customize: function(win) {
-                       
-                        var logoHtml = 
-                            '<div style="text-align: center; padding-bottom: 30px;">' +
-                            '<img src="<?php echo base_url() ?>/assets/img/logos/snsu.png" alt="Logo" style="width: 80px; display: inline-block;">' +
-                            '<h3 style="display: inline-block; margin-right: 10px;">SNSU EVALUATION</h3>' +
-                            '</div>';
-
-                        $(win.document.body).find('table').before(logoHtml);
-
-
-                    },
-                },
-                
-            ],
-        });
-    });
-</script>

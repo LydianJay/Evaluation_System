@@ -35,25 +35,44 @@
                 </div>
             <?php } ?>
         </div>
+        
         <div class="row">
-            <div class="col-12">
-                <div class="card my-4">
+            <div class="col">
+                <form action="<?php echo $current_page ?>" method="post">
+                    <div class="card-header d-flex">
+                        <h4>Faculty</h4>
+                        <select name="facultyID" id="facultyID" class="form-control select2" style="width: 200px;" required>
+                            <option value=""></option>
+                            <?php foreach ($evaluations as $eval) { ?>
+                                <option value="<?php echo $eval->id ?>" <?php if ($facultyID == $eval->id) echo 'selected' ?>><?php echo $eval->fname . ' ' .  $eval->lname ?></option>
+                            <?php } ?>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="row" id = "pdfContent">
+            
+            <div class="col-12" >
+                <div class="card my-4" >
                     <div class="card-body pb-2">
-                        <form action="<?php echo $current_page ?>" method="post">
-                            <div class="card-header d-flex">
-                                <h4>Faculty</h4>
-                                <select name="facultyID" id="facultyID" class="form-control select2" style="width: 200px;" required>
-                                    <option value=""></option>
-                                    <?php foreach ($evaluations as $eval) { ?>
-                                        <option value="<?php echo $eval->id ?>" <?php if ($facultyID == $eval->id) echo 'selected' ?>><?php echo $eval->fname . ' ' .  $eval->lname ?></option>
-                                    <?php } ?>
-                                </select>
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                            </div>
-                        </form>
+                        <div class="container-fluid d-flex flex-column justify-content-center">
+                            <img src= "<?php echo base_url().'assets/img/logos/snsu.png' ?>" alt="snsu logo" style = "width:200px; height: 200px; margin: auto;">
+                        </div>
+                        <div class="container-fluid mb-5">
+                            
+                            <p class="h2 text-center">Surigao Del Norte State University</p>
+                        </div>
+                      
+
+
+
+                        
                         <?php if ($groupedRecords) { ?>
-                            <h4>Faculty: <?php echo $recFaculty->fname . ' ' .  $recFaculty->lname ?></h4>
-                            <h4>No Students : <?php echo $countStud ?></h4>
+                            <h4 id = "fName">Faculty: <?php echo $recFaculty->fname . ' ' .  $recFaculty->lname ?></h4>
+                            
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
                                     <tr>
@@ -134,46 +153,10 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="container" id = "saveAs">
+                <button class="btn btn-info align-middle">DOWNLOAD PDF</button>
+            </div>
+        </div>
 
-        <script>
-            $(document).ready(function() {
-                $('#dataTable').DataTable({
-                    dom: 'Bfrtip',
-                    searching: false,
-                    "paging": false,
-                    buttons: [{
-                            extend: 'print',
-                            footer: true,
-                            customize: function(win) {
-                                // Add your logo on the right side of the title in the header
-                                var logoHtml = '<div style="text-align: center;">' +
-                                    '<img src="<?php echo base_url() ?>/assets/img/logos/snsu.png" alt="Logo" style="width: 80px; display: inline-block;">' +
-                                    '<h3 style="display: inline-block; margin-right: 10px;">SNSU EVALUATION</h3>' +
-                                    '</div>';
-
-                                $(win.document.body).find('table').before(logoHtml);
-                            },
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            header: true,
-                            footer: true,
-                            title: 'Evaluation',
-                            orientation: 'portrait',
-                            pageSize: 'LETTER',
-                            download: 'open',
-                            customize: function(doc) {
-                                // Check if doc object is defined
-                                if (typeof doc !== 'undefined') {
-                                    doc.layout = 'lightHorizontalLines';
-                                    doc.pageMargins = [30, 30, 30, 30];
-                                    doc.defaultStyle.fontSize = 12;
-                                    doc.styles.tableHeader.fontSize = 12;
-                                    doc.styles.title.fontSize = 14;
-                                }
-                            }
-                        }
-                    ],
-                });
-            });
-        </script>
+        

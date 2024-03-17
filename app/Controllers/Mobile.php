@@ -192,6 +192,7 @@ class Mobile extends BaseController
         $this->builder->where('blocksections_details.subID', $subID);
         $this->builder->where('blocksections_details.studentID', $this->session->studentLogin['id']);
         $data['records'] = $this->builder->get()->getFirstRow();
+        
 
         $this->builder = $this->db->table('categories');
         $this->builder->select('categories.*');
@@ -232,7 +233,11 @@ class Mobile extends BaseController
         $data['isDisabled'] = true;
 
 
-        $studentQuery = $this->db->table('students');
+        $data['session_data'] = $this->session->get('studentLogin');
+        $builder4 = $this->db->table('subjects');
+        $builder4->select('subjects.title AS sTitle, subjects.subID as sID, subjects.subCode as code');
+        $builder4->where('subjects.subID ', $subID);
+        $data['sub'] = $builder4->get()->getFirstRow();
        
 
         echo view($this->module_path . '/header', $data);

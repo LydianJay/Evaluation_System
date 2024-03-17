@@ -18,9 +18,7 @@
         </div>
     </nav>
 
-    <div class="container-fluid py-4">
-        
-
+    <div class="container-fluid">
         <div class="row my-5">
             <div class="col-2">
                 <p class="h4 text-end">Faculty Name </p>
@@ -53,6 +51,18 @@
                 </form>
             </div>
         </div>    
+        
+    </div>
+
+    <div class="container-fluid" id = "pdfContent">
+            <div class="container-fluid d-flex flex-column justify-content-center">
+                <img src= "<?php echo base_url().'assets/img/logos/snsu.png' ?>" alt="snsu logo" style = "width:200px; height: 200px; margin: auto;">
+            </div>
+            <div class="container-fluid mb-5">
+                
+                <p class="h2 text-center">Surigao Del Norte State University</p>
+            </div>
+
         
         <div class="row my-2">
             <div class="col">
@@ -128,47 +138,14 @@
         
         
     </div>
+    <div class="row">
+        <div class="container" id = "saveAs">
+            <button class="btn btn-info align-middle">DOWNLOAD PDF</button>
+        </div>
+    </div>
 
 
 </main>
 
 
 
-<script>
-    $(document).ready(function() {
-        $('#dataTable').DataTable({
-            dom: 'Bfrtip',
-            searching: false,
-            buttons: [{
-                    extend: 'print',
-                    footer: true,
-                    customize: function(win) {
-                        // Add your logo on the right side of the title in the header
-                        var logoHtml = '<div style="text-align: center;">' +
-                            '<img src="<?php echo base_url() ?>/assets/img/logos/snsu.png" alt="Logo" style="width: 80px; display: inline-block;">' +
-                            '<h3 style="display: inline-block; margin-right: 10px;">SNSU EVALUATION</h3>' +
-                            '</div>';
-
-                        $(win.document.body).find('table').before(logoHtml);
-                    },
-                },
-                {
-                    extend: 'pdfHtml5',
-                    header: true,
-                    footer: true,
-                    title: 'Semester Evaluation',
-                    orientation: 'portrait',
-                    pageSize: 'LETTER',
-                    download: 'open',
-                    customize: function(doc) {
-                        doc.layout = 'lightHorizontalLines';
-                        doc.pageMargins = [30, 30, 30, 30];
-                        doc.defaultStyle.fontSize = 12;
-                        doc.styles.tableHeader.fontSize = 12;
-                        doc.styles.title.fontSize = 14;
-                    }
-                }
-            ],
-        });
-    });
-</script>
