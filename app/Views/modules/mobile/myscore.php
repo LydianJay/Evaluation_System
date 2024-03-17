@@ -18,13 +18,15 @@
         </div>
     </nav>
     <!-- End Navbar -->
-    <div class="container-fluid py-4">
-        <div class="row" id = "pdfContent">
-            <div class="col-12 mb-xl-0 mb-4">
-                <div class="card">
-                    <div class="card-body">
+    <div class="container-fluid py-4 px-5">
+        <div class="row" >
+            <div class="col-12 mb-xl-0 mb-4 mx-auto">
+                <div class="card" id = "pdfContent">
+                    <div class="card-body" id = "pdfContent">
                         <form action="<?php echo $current_page . '/save' ?>" method="post">
-                            <h4 id ="fName"><?php echo ucfirst($records->fname) . ' ' .  ucfirst($records->mname) . ' ' . ucfirst($records->lname) ?></h4>
+                            <h4 id ="fName">Faculty Name: <?php echo ucfirst($records->fname) . ' ' .  ucfirst($records->mname) . ' ' . ucfirst($records->lname) ?></h4>
+                            <h4>Evaluator Name: <?php echo ucfirst($records->fname) . ' ' .  ucfirst($records->mname) . ' ' . ucfirst($records->lname) ?></h4>
+                            
                             <span><?php echo ucfirst($records->position) ?></span>
                             <table class="table table-bordered table-sm mt-5">
                                 <tbody>
@@ -40,23 +42,22 @@
                                                     <input type="hidden" name="studentIdno" value="<?php echo $studentIdno ?>">
                                                     <input type="hidden" name="studentID" value="<?php echo $studentID ?>">
                                                     <input type="hidden" name="catID_<?php echo $ques['category']->catID ?>" value="<?php echo $ques['category']->catID ?>">
-                                                    <td style="text-align: center; font-weight: bold; width: 50px"><?php echo $ques['category']->catName ?></td>
+                                                    <td style="text-align: center; font-weight: bold; width: 25px"><?php echo $ques['category']->catName ?></td>
                                                     <td style="font-weight: bold;">
                                                         <p class="dynamic-text long-text" style="font-weight: bold;">
                                                             <?php echo $ques['category']->title ?>
                                                         </p>
                                                     </td>
-                                                    <td style="width: 10px; text-align:center">RATING</td>
+                                                    <td style="width: 8px; text-align:center">RATING</td>
                                                 </tr>
                                                 <?php
                                                 $total = 0;
                                                 foreach ($ques['questions'] as $que) { ?>
                                                     <tr>
                                                         <input type="hidden" name="quesID_<?php echo $que->quesID ?>" value="<?php echo $que->quesID ?>">
-                                                        <td style="text-align: center; width: 50px"><?php echo $que->quesNo ?></td>
+                                                        <td style="text-align: center; width: 15px"><?php echo $que->quesNo ?></td>
                                                         <td>
-                                                            <p class="dynamic-text long-text"><?php echo $que->definition ?></p>
-
+                                                            <p class="dynamic-text text-wrap"><?php echo $que->definition ?></p>
                                                         </td>
                                                         <td class="text-center"><?php echo $que->rating ?></td>
                                                     </tr>

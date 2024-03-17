@@ -146,6 +146,8 @@ class Mobile extends BaseController
 
         $data['module_title'] = "Evaluate";
 
+
+
         echo view($this->module_path . '/header', $data);
         echo view($this->module_path . '/evaluate');
         echo view($this->module_path . '/header');
@@ -227,6 +229,11 @@ class Mobile extends BaseController
 
         $data['questions']    = $questions;
         $data['module_title'] = "My Score";
+        $data['isDisabled'] = true;
+
+
+        $studentQuery = $this->db->table('students');
+       
 
         echo view($this->module_path . '/header', $data);
         echo view($this->module_path . '/myscore');
