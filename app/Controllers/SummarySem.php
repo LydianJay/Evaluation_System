@@ -45,9 +45,10 @@ class SummarySem extends BaseController {
 
         $ballotTbl = $this->db->table('ballot');
         $ballotTbl->select('SUM(ballot.rating) AS sum, ballot.evaluationID AS evalID, COUNT(ballot.rating) as no');
-        $ballotTbl->join('evaluations', 'ballot.evaluationID = evaluations.id');
+       // $ballotTbl->join('evaluations', 'ballot.evaluationID = evaluations.id');
         $ballotTbl->where('facultyID', $fID);
-        $ballotTbl->orderBy('evaluations.id');
+        $ballotTbl->groupBy('ballot.evaluationID');
+        $ballotTbl->orderBy('ballot.evaluationID');
         $res = $ballotTbl->get()->getResult();
         $data['query'] = $res;
         

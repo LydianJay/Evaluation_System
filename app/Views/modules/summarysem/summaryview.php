@@ -100,7 +100,7 @@
                                             $isEmpty = false;
                                             break;
                                         }
-    
+                                        
                                     }
                                     if($isEmpty){
                                         echo "<td class='text-center'>N/A</td>";
