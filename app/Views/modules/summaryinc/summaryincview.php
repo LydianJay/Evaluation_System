@@ -139,10 +139,7 @@
                 <p class="h4 text-center">TEACHING EFFECTIVENESS EVALUATION</p>
             </div>
         </div>
-
         
-        
-
        
         
         <div class="row">
@@ -150,6 +147,23 @@
                 <p class="h5 text-center mt-2">Average Rating per Semester</p>
             </div>
         </div>
+        
+        <div class="row mt-5">
+            <div class="col-6">
+                <p class="h5 text-start">Faculty: <?php echo $facultyData->fname.' '.$facultyData->lname?></p>
+            </div>
+           
+            <div class="col">
+                <p class="h5 text-end">Term/AY: <?php echo $termData ?></p>
+            </div>
+        </div>
+        <div class="row mt">
+            <div class="col">
+                <p class="h5 text-start">Program: <?php echo $courseData->title?></p>
+            </div>
+            
+        </div>
+        
 
         <div class="row my-5">
             <div class="col">

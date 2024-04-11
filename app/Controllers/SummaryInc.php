@@ -62,8 +62,22 @@ class SummaryInc extends BaseController {
             $filtered->groupBy(['ballot.catID']);
             $data['ratings'] = $filtered->get()->getResult();
             
-            
-           
+            foreach ($data['facultyTbl'] as $fac) {
+                if($fac->id == $data['selectedProf']){
+                    $data['facultyData'] = $fac;
+                }
+            }
+            foreach ($data['courseTbl'] as $course) {
+                if($course->courseID == $data['selectedCourse']){
+                    $data['courseData'] = $course;
+                }
+            }
+            foreach ($data['termTbl'] as $term) {
+                if($term->id == $data['selectedTerm']){
+                    
+                    $data['termData'] = ($term->term == 0 ? '1st Semester' : '2nd Semester').' '.$term->acadYear.'-'.($term->acadYear + 1);
+                }
+            }
         }
         // ==========================================================================
 
