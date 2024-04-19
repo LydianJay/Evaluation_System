@@ -150,16 +150,43 @@
         
         <div class="row mt-5">
             <div class="col-6">
-                <p class="h5 text-start">Faculty: <?php echo $facultyData->fname.' '.$facultyData->lname?></p>
+                <p class="h5 text-start">Faculty: <?php 
+                    if(isset($facultyData)) {
+                        echo $facultyData->fname.' '.$facultyData->lname;
+                    }
+                    else {
+                        echo 'N/A';
+                    }
+                    ?>
+                </p>
             </div>
            
             <div class="col">
-                <p class="h5 text-end">Term/AY: <?php echo $termData ?></p>
+                <p class="h5 text-end">Term/AY: 
+                    <?php 
+                        if(isset($termData)){
+                            echo $termData;
+                        }
+                        else {
+                            echo 'N/A';
+                        }
+                    ?>
+                </p>
             </div>
         </div>
         <div class="row mt">
             <div class="col">
-                <p class="h5 text-start">Program: <?php echo $courseData->title?></p>
+                <p class="h5 text-start">Program: 
+                    <?php
+                        if(isset($courseData)){
+                            echo $courseData->title;
+
+                        }
+                        else {
+                            echo 'N/A';
+                        }
+                    ?>
+                </p>
             </div>
             
         </div>
@@ -278,5 +305,3 @@
 
 
 
-
-</main>
