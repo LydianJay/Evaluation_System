@@ -28,6 +28,14 @@ class Summary extends BaseController
     {
         $data = $this->data;
 
+        $data['selectedYear']       = $this->request->getPost('acadYearField');
+        $data['selectedTerm']       = $this->request->getPost('termField');
+        if(isset($data['selectedYear']) && isset($data['selectedTerm']) ){
+            $textTerm           = ($data['selectedTerm'] == 1) ? '1st Sem' : '2nd Sem';
+            $data['textTerm']   = $textTerm.' '.$data['selectedYear'].'-'.$data['selectedYear']+1;
+        }
+
+
         $condition_fields = array(
             array(
                 'variable'      => 'facultyID',
@@ -95,10 +103,13 @@ class Summary extends BaseController
             $recFaculty = $getFaculty->get()->getRow();
 
             $builder = $this->db->table('ballot');
-            $builder->select('SUM(ballot.rating) as total_rating, catID');
+            $builder->select(' SUM(ballot.rating) as total_rating, catID, COUNT(studentID)/5 as studCount');
             $builder->select('subjects.subCode, subjects.title');
-            $builder->where('facultyID', $facultyID);
             $builder->join('subjects', 'subjects.subID = ballot.subID', 'left');
+            $builder->join('evaluations', 'evaluations.id = ballot.evaluationID', 'left');
+            $builder->where('facultyID', $facultyID);
+            $builder->where('evaluations.acadYear', $data['selectedYear']);
+            $builder->where('evaluations.term', $data['selectedTerm']);
             $builder->groupBy('title'); // Group by title
             $builder->groupBy('catID'); // Group by catID
             $builder->orderBy('facultyID', 'asc'); // Order by catID in ascending order
@@ -110,6 +121,7 @@ class Summary extends BaseController
             $builder->groupBy('subID');         // Group by title
             $noStud  = $builder->countAllResults();
 
+
             // Check if records are found
             if ($recordings) {
                 foreach ($recordings as $recording) {
@@ -118,7 +130,8 @@ class Summary extends BaseController
                         // If the title key doesn't exist, create an array for it
                         $groupedRecords[$recording->title] = array(
                             'title' => $recording->title,
-                            'cat' . $recording->catID => $recording->total_rating
+                            'cat' . $recording->catID => $recording->total_rating,
+                            
                         );
                     } else {
                         // If the title key already exists, add the category information to it
@@ -156,7 +169,6 @@ class Summary extends BaseController
 
         $data['facultyID']  = $facultyID;
         $data['recFaculty'] = $recFaculty;
-
         echo view('header', $data);
         echo view($this->module_path   . '/list');
         echo view('footer');

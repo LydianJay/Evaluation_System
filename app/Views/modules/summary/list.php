@@ -35,43 +35,105 @@
                 </div>
             <?php } ?>
         </div>
-        
-        <div class="row">
-            <div class="col">
-                <form action="<?php echo $current_page ?>" method="post">
-                    <div class="card-header d-flex">
-                        <h4>Faculty</h4>
-                        <select name="facultyID" id="facultyID" class="form-control select2" style="width: 200px;" required>
-                            <option value=""></option>
-                            <?php foreach ($evaluations as $eval) { ?>
-                                <option value="<?php echo $eval->id ?>" <?php if ($facultyID == $eval->id) echo 'selected' ?>><?php echo $eval->fname . ' ' .  $eval->lname ?></option>
-                            <?php } ?>
-                        </select>
-                        <button type="submit" class="btn btn-primary">Filter</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        
-        <div class="row" id = "pdfContent">
+        <form action="<?php echo $current_page ?>" method="post">
             
-            <div class="col-12" >
+            <div class="row">
+                <div class="col-6">
+                        <div class="card-header d-flex">
+                            <h4 class = 'me-1' >Faculty</h4>
+                            <select name="facultyID" id="facultyID" class="form-control select2" style="width: 200px;" required>
+                                <option value=""></option>
+                                <?php foreach ($evaluations as $eval) { ?>
+                                    <option value="<?php echo $eval->id ?>" <?php if ($facultyID == $eval->id) echo 'selected' ?>><?php echo $eval->fname . ' ' .  $eval->lname ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col d-flex flex-row justify-content-end flex-nowrap">
+                            <p class="h4 mx-1">Term:</p>
+                            <select name="termField" id="termField" class="form-control select2 w-25">
+                                
+                                <?php
+                                    for($i = 0; $i < 2; $i++) {
+                                ?>
+                            
+                                <option value="<?php echo $i+1; ?>"  <?php echo ($i+1) == $selectedTerm ? 'selected' : '' ?>><?php echo $i == 0 ? '1st Semester' : '2nd Semester';?>
+                                </option>
+                                
+                                <?php }?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex flex-row justify-content-end flex-nowrap">
+                            <p class="h4 mx-1">A/Y:</p>
+                            <select name="acadYearField" id="acadYearField" class="form-control select2 w-25">
+                        
+                                <?php
+                                    // ===============================================
+                                    // NOTE: 
+                                    // This is a bit of a shitty implementation as 
+                                    // user can only select from year 2020 to 2069
+                                    // 
+                                    // A solution is to query the current year then add
+                                    // and subtract 25 or maybe 50 years to it
+                                    // e.g current year: 2024, range: (2024-25) to (2024+25)
+                                    // ===============================================
+                                
+                                    for($i = 2020; $i <= 2069; $i++) { 
+                                ?>
+                                    
+                                    <option value="<?php echo $i;?>" <?php echo ($selectedYear == $i) ?  'selected' : '';?>> 
+                                        <?php echo $i."-".$i+1; ?>
+                                    </option>
+                                <?php }?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary mx-2" method="POST" action="<?php echo $current_page ?>">
+                        Filter
+                    </button>
+                    
+                </div>
+            </div>
+        </form>
+        
+        <div class="row"  id = "pdfContent">
+            
+            <div class="col-12 ">
                 <div class="card my-4" >
                     <div class="card-body pb-2">
                         <div class="container-fluid d-flex flex-column justify-content-center">
                             <img src= "<?php echo base_url().'assets/img/logos/snsu.png' ?>" alt="snsu logo" style = "width:200px; height: 200px; margin: auto;">
                         </div>
                         <div class="container-fluid mb-5">
-                            
                             <p class="h2 text-center">Surigao Del Norte State University</p>
                         </div>
-                      
-
-
-
-                        
                         <?php if ($groupedRecords) { ?>
-                            <h4 id = "fName">Faculty: <?php echo $recFaculty->fname . ' ' .  $recFaculty->lname ?></h4>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4 id = "fName">Faculty: <?php echo $recFaculty->fname . ' ' .  $recFaculty->lname ?></h4>
+                                </div>
+                                <div class="col d-flex flex-column justify-content-end">
+                                    <p class="h4 text-end">Term - A/Y: 
+                                        <?php
+                                            if(isset($textTerm)){
+                                                echo $textTerm;
+                                            }
+                                            else {
+                                                echo 'N/A';
+                                            }
+                                        ?>
+                                    </p>
+                                </div>
+                            </div>
                             
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
@@ -81,9 +143,9 @@
                                             <?php $words = explode(' ', $cat->title);
                                             $firstWord = isset($words[0]) ? $words[0] : '';
                                             ?>
-                                            <td class="text-center" style="width: 200px;"><?php echo $cat->catName . ' ' . $firstWord . '..'; ?></td>
+                                            <td class="text-center" style="width: 200px;"><?php echo $cat->catName; ?></td>
                                         <?php } ?>
-                                        <td>Total</td>
+                                        <td class="text-center">Total</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -98,22 +160,32 @@
                                             <?php
                                             $ctr = 0;
                                             $totalH = 0;
-                                            // Assuming you have a predefined set of categories (cat1, cat2, cat3, cat4)
                                             for ($i = 1; $i <= 4; $i++) {
                                             ?>
                                                 <td class="text-center">
                                                     <?php
                                                     $categoryKey = 'cat' . $i;
-                                                    echo isset($rec[$categoryKey]) ? $rec[$categoryKey] : '';
+                                                    if($countStud == 0){
+                                                        echo 'N/A';
+                                                    }
+                                                    else {
+                                                        echo isset($rec[$categoryKey]) ? number_format($rec[$categoryKey] / $countStud, 2) : '';
+                                                    }
+                                                   // echo isset($rec[$categoryKey]) ? number_format($countStud, 2) : '';
                                                     ?>
                                                 </td>
                                             <?php
                                                 $ctr++;
-                                                $totalH += isset($rec[$categoryKey]) ? $rec[$categoryKey] : 0;
+                                                if($countStud == 0) {
+                                                    echo 'N/A';
+                                                }
+                                                else {
+                                                    $totalH += isset($rec[$categoryKey]) ? $rec[$categoryKey] / $countStud : 0;
+                                                }
                                             }
                                             ?>
 
-                                            <td class="text-center"><?php echo $totalH ?></td>
+                                            <td class="text-center"><?php echo number_format($totalH, 2) ?></td>
                                         </tr>
                                     <?php
                                         $countFaculty++;
@@ -134,9 +206,17 @@
                                         ?>
                                             <th class="text-center">
                                                 <?php
-                                                $ave =  round($dat /  $countFaculty / $countStud, 2);
-                                                echo  $ave;
-                                                $totalV += $ave;
+                                                
+                                                if( $countStud == 0 || $dat == 0){
+                                                    echo 'N/A';
+                                                }
+                                                else {
+                                                    $ave =  round($dat / $countStud, 2);
+                                                    echo number_format($ave, 2, '.', ',');
+                                                    $totalV += $ave;
+                                                }
+
+                                               
                                                 ?></th>
                                         <?php
                                         }
@@ -149,6 +229,27 @@
                         <?php } else { ?>
                             <h4>No data found</h4>
                         <?php } ?>
+
+                        <div class="container-fluid mt-5">
+                            <div class="container">
+                                <p class="h4">Legend</p>
+                            </div>
+                            <?php
+                                foreach ($categories as $cat) {
+                            ?>
+                            <div class="container">
+                                    <p class="h6">
+                                        <?php
+                                            echo $cat->catName." - ".$cat->title;
+                                        ?>
+                                    </p>
+                            </div>
+
+                            <?php } ?>
+
+                        </div>
+
+
                     </div>
                 </div>
             </div>
