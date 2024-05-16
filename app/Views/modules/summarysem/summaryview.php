@@ -56,17 +56,17 @@
 
     <div class="container-fluid" id = "pdfContent">
             <div class="container-fluid d-flex flex-column justify-content-center">
-                <img src= "<?php echo base_url().'assets/img/logos/snsu.png' ?>" alt="snsu logo" style = "width:200px; height: 200px; margin: auto;">
+                <img src= "<?php echo base_url().'assets/img/logos/snsu.png' ?>" alt="snsu logo" style = "width:125px; height: 125px; margin: auto;">
             </div>
             <div class="container-fluid mb-5">
                 
-                <p class="h2 text-center">Surigao Del Norte State University</p>
+                <p class="h5 text-center">Surigao Del Norte State University</p>
             </div>
 
         
         <div class="row my-2">
             <div class="col">
-                <p class="h4 text-center">Semester Summary</p>
+                <p class="h5 text-center">Semester Summary</p>
                 <p class="h6 text-center">Points For Student Evaluation</p>
             </div>
         </div>
@@ -95,12 +95,11 @@
                                     $isEmpty = true;
                                     foreach($query as $row){
                                         if($row->evalID == $evalinfo->id){
-                                            $average = $row->sum / $row->no * 5;
+                                            $average = $row->sum / $row->no * 4;
                                             echo "<td class='text-center'>".number_format((float)$average, 2, '.', '')."</td>";
                                             $isEmpty = false;
                                             break;
                                         }
-                                        
                                     }
                                     if($isEmpty){
                                         echo "<td class='text-center'>N/A</td>";
@@ -109,29 +108,7 @@
                             ?>
                         </tr>
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td class="text-center">Average Rating</td>
-                            <?php
-                                foreach ($evalrow as $evalinfo){
-                                    $isEmpty = true;
-                                    
-                                    foreach($query as $row) {
-                                        if($row->evalID == $evalinfo->id) {
-                                            $average = $row->sum / $row->no;
-                                            echo "<td class='text-center'>".number_format((float)$average, 2, '.', '')."</td>";
-                                            $isEmpty = false;
-                                            break;
-                                        }
-    
-                                    }
-                                    if($isEmpty) {
-                                        echo "<td class='text-center'>N/A</td>";
-                                    }
-                                }
-                            ?>
-                        </tr>
-                    </tfoot>
+                    
                 </table>
             </div>
         </div>

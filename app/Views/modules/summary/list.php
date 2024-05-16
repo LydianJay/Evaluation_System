@@ -111,18 +111,18 @@
                 <div class="card my-4" >
                     <div class="card-body pb-2">
                         <div class="container-fluid d-flex flex-column justify-content-center">
-                            <img src= "<?php echo base_url().'assets/img/logos/snsu.png' ?>" alt="snsu logo" style = "width:200px; height: 200px; margin: auto;">
+                            <img src= "<?php echo base_url().'assets/img/logos/snsu.png' ?>" alt="snsu logo" style = "width:125px; height: 125px; margin: auto;">
                         </div>
                         <div class="container-fluid mb-5">
-                            <p class="h2 text-center">Surigao Del Norte State University</p>
+                            <p class="h5 text-center">Surigao Del Norte State University</p>
                         </div>
                         <?php if ($groupedRecords) { ?>
                             <div class="row">
                                 <div class="col-6">
-                                    <h4 id = "fName">Faculty: <?php echo $recFaculty->fname . ' ' .  $recFaculty->lname ?></h4>
+                                    <h5 id = "fName">Faculty: <?php echo $recFaculty->fname . ' ' .  $recFaculty->lname ?></h4>
                                 </div>
                                 <div class="col d-flex flex-column justify-content-end">
-                                    <p class="h4 text-end">Term - A/Y: 
+                                    <p class="h5 text-end">Term - A/Y: 
                                         <?php
                                             if(isset($textTerm)){
                                                 echo $textTerm;
@@ -153,6 +153,7 @@
                                     $data         = array();
                                     $countFaculty = 0;
                                     $totalV       = 0;
+                                    $noOfStudents = array();
                                     foreach ($groupedRecords as $title => $rec) {
                                     ?>
                                         <tr>
@@ -160,32 +161,44 @@
                                             <?php
                                             $ctr = 0;
                                             $totalH = 0;
+
+                                            $sum = 0;
+
                                             for ($i = 1; $i <= 4; $i++) {
                                             ?>
                                                 <td class="text-center">
                                                     <?php
                                                     $categoryKey = 'cat' . $i;
-                                                    if($countStud == 0){
+                                                    if($countStud == 0 || $rec['count'] == 0){
                                                         echo 'N/A';
                                                     }
                                                     else {
-                                                        echo isset($rec[$categoryKey]) ? number_format($rec[$categoryKey] / $countStud, 2) : '';
+                                                        if(isset($rec[$categoryKey])) {
+                                                            echo number_format($rec[$categoryKey] / $rec['count'], 2);
+                                                            $sum += $rec[$categoryKey] / $rec['count'];
+                                                            // echo $rec['count'];
+                                                        }
+                                                        else {
+                                                            echo '';
+                                                        }
+                                                        //echo $countStud;
                                                     }
                                                    // echo isset($rec[$categoryKey]) ? number_format($countStud, 2) : '';
                                                     ?>
                                                 </td>
                                             <?php
                                                 $ctr++;
-                                                if($countStud == 0) {
-                                                    echo 'N/A';
-                                                }
-                                                else {
-                                                    $totalH += isset($rec[$categoryKey]) ? $rec[$categoryKey] / $countStud : 0;
-                                                }
+                                                // if($countStud == 0) {
+                                                //     echo 'N/A';
+                                                // }
+                                                // else {
+                                                    
+                                                //     $totalH += isset($rec[$categoryKey]) ? $rec[$categoryKey] / $countStud : 0;
+                                                // }
                                             }
                                             ?>
 
-                                            <td class="text-center"><?php echo number_format($totalH, 2) ?></td>
+                                            <td class="text-center"><?php echo number_format($sum, 2) ?></td>
                                         </tr>
                                     <?php
                                         $countFaculty++;
@@ -194,12 +207,16 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th class="text-end">Average</th>
+                                        <th class="text-center">Average</th>
                                         <?php
+                                        
                                         foreach ($groupedRecords as $title => $rec) {
                                             for ($i = 1; $i <= 4; $i++) {
                                                 $categoryKey = 'cat' . $i;
-                                                $data[$i - 1] = (isset($data[$i - 1]) ? $data[$i - 1] + $rec[$categoryKey] : $rec[$categoryKey]);
+                                                if($rec['count'] > 0){
+                                                    $data[$i - 1] = (isset($data[$i - 1]) ? $data[$i - 1] + $rec[$categoryKey] /  $rec['count'] : $rec[$categoryKey] /  $rec['count']);
+
+                                                }
                                             }
                                         }
                                         foreach ($data as $dat) {
@@ -211,8 +228,8 @@
                                                     echo 'N/A';
                                                 }
                                                 else {
-                                                    $ave =  round($dat / $countStud, 2);
-                                                    echo number_format($ave, 2, '.', ',');
+                                                    $ave =  round($dat , 2);
+                                                    echo number_format($ave / count($groupedRecords), 2, '.', ',');
                                                     $totalV += $ave;
                                                 }
 
@@ -221,7 +238,25 @@
                                         <?php
                                         }
                                         ?>
-                                        <td class="text-center"><?php echo $totalV ?></td>
+                                        <td class="text-center">
+                                            <?php 
+                                            // echo $totalV
+                                            $r = round($totalV, 2);
+                                            echo number_format($r, 2, '.', ','); 
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <tr><th></th></tr>
+                                    <tr>
+                                        <th class = 'text-center'>Average Sem Rating
+                                            
+                                        </th>
+                                        <th class="text-center">
+                                        <?php 
+                                               $s = round($totalV / (count($groupedRecords) * 5), 2);
+                                               echo number_format($s, 2, '.', ','); 
+                                            ?>
+                                        </th>
                                     </tr>
                                 </tfoot>
 

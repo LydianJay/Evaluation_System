@@ -131,7 +131,7 @@ class Summary extends BaseController
                         $groupedRecords[$recording->title] = array(
                             'title' => $recording->title,
                             'cat' . $recording->catID => $recording->total_rating,
-                            
+                            'count' => $recording->studCount,
                         );
                     } else {
                         // If the title key already exists, add the category information to it
@@ -147,6 +147,7 @@ class Summary extends BaseController
                         'cat2'  => 0,
                         'cat3'  => 0,
                         'cat4'  => 0,
+                        'count' => 0,
                         // Add more default values as needed.
                     ),
                 );
@@ -155,10 +156,10 @@ class Summary extends BaseController
             // You can use this array as needed in your application.
         }
 
-        $data['countStud'] = $noStud;
+        $data['countStud']          = $noStud;
 
         // Pass the grouped records to the view
-        $data['groupedRecords'] = $groupedRecords;
+        $data['groupedRecords']     = $groupedRecords;
 
         $evaluations          = $this->db->table('faculty');
         $evaluations->orderBy('fname', 'asc');

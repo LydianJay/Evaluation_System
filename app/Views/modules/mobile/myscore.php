@@ -29,16 +29,16 @@
                 <div class="card" id = "pdfContent">
                     <div class="card-body" id = "pdfContent">
                         <div class="container-flud d-flex flex-column justify-content-center">
-                            <img src= "<?php echo base_url().'assets/img/logos/snsu.png' ?>" alt="snsu logo" style = "width:200px; height: 200px; margin: auto;">
+                            <img src= "<?php echo base_url().'assets/img/logos/snsu.png' ?>" alt="snsu logo" style = "width:125px; height: 125px; margin: auto;">
                         </div>
                         <div class="container-fluid mb-5">
                             
-                            <p class="h2 text-center">Surigao Del Norte State University</p>
+                            <p class="h5 text-center">Surigao Del Norte State University</p>
                         </div>
 
-                            <h5 id ="fName">Faculty Name: <?php echo ucfirst($records->fname) . ' ' .  ucfirst($records->mname) . ' ' . ucfirst($records->lname) ?></h4>
-                            <h5>Evaluator: <?php echo ucfirst($session_data['fname']) . ' ' .  ucfirst($session_data['mname']) . ' ' . ucfirst($session_data['lname']) ?></h4>
-                            <h5>Subject: <?php echo ' ['.$sub->code.'] '.$sub->sTitle?></h4>
+                            <h6 id ="fName">Faculty Name: <?php echo ucfirst($records->fname) . ' ' .  ucfirst($records->mname) . ' ' . ucfirst($records->lname) ?></h4>
+                            <h6>Evaluator: <?php echo ucfirst($session_data['fname']) . ' ' .  ucfirst($session_data['mname']) . ' ' . ucfirst($session_data['lname']) ?></h4>
+                            <h6>Subject: <?php echo ' ['.$sub->code.'] '.$sub->sTitle?></h4>
                             
                         <form action="<?php echo $current_page . '/save' ?>" method="post">
                             
