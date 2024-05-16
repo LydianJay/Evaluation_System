@@ -73,21 +73,23 @@
 
         <div class="row my-2">
             <div class="col">
-                <table class="table border-dark" id = "dataTable">
+                <table class="table table-primary table-bordered" id = "dataTable">
                     <thead>
                         <tr>
-                            <th></th>
+                            <td></td>
                             <?php
-                                foreach ($evalrow as $name){
+                                foreach ($evalrow as $name) {
                                     
                                     $split = explode(" ",$name->name);
                                     $parsed = $split[2].'-'.$split[count($split) - 1];
-                                    echo "<th class='text-center'>".$parsed."</th>";
+                                    echo "<td class='text-center'>".$parsed."</td>";
                                 }
                             ?>
+                            
                         </tr>
                     </thead>
                     <tbody>
+                        
                         <tr>
                             <td class="text-center">Average per Sem</td>
                             <?php

@@ -95,6 +95,10 @@
         .dataTables_wrapper .dataTables_paginate .paginate_button {
             padding: 0px;
         }
+        .table-primary {
+            --bs-table-bg: #f0f2f5;
+            border-color: black;
+        }
     </style>
 </head>
 
