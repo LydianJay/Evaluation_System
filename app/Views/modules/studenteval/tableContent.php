@@ -1,7 +1,7 @@
 
     <div class="row mt-5">
         <div class="col">
-            <table class="table border-dark" id = "dataTable">
+            <table class="table table-bordered" id = "dataTable">
                 <thead>
                     <tr>
                         
@@ -83,7 +83,9 @@
                             ?>
                         </th>
 
-                        <?php }?>
+                        <?php 
+                            }
+                        ?>
                     </tr>
                     
                 </tfoot>

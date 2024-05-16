@@ -7,6 +7,8 @@
     <div class="container-fluid mb-5">
         
         <p class="h5 text-center">Surigao Del Norte State University</p>
+        <p class="h6 text-center">Narciso St, Surigao City, Surigao del Norte</p>
+        
     </div>
 
     <div class="row mt-5">
@@ -33,7 +35,7 @@
             <p class="h6 text-end pe-6">Academic Year: 
                 <?php
                     if(isset($sTerm) && isset($sYear)) {
-                        echo $sYear. " - ". ($sYear+1). " " .($sTerm == 1 ? '[1st Term]' : '[2nd Term]');
+                        echo $sYear. " - ". ($sYear+1). " " .($sTerm == 1 ? '[1st Sem]' : '[2nd Sem]');
                     }
                 ?>
             </p>

@@ -60,56 +60,99 @@
             </div>
             <div class="container-fluid mb-5">
                 
-                <p class="h5 text-center">Surigao Del Norte State University</p>
+                <p class="h4 text-center">Surigao Del Norte State University</p>
+                <p class="h6 text-center">Narciso St, Surigao City, Surigao del Norte</p>
+                <p class="h6 text-center mt-1">CHED-BDM JC#3</p>
+                <p class="h6 text-center mt-1">Rating Perion:</p>
             </div>
 
         
         <div class="row my-2">
             <div class="col">
-                <p class="h5 text-center">Semester Summary</p>
-                <p class="h6 text-center">Points For Student Evaluation</p>
+                <p class="h6 text-start">
+                    Name of Faculty: <?php
+                        if(isset($selectedID)){
+                            echo $selectedID->lname.' '.$selectedID->fname;
+                        }
+                        else {
+                            echo 'No Selected';
+                        }
+                    ?>
+                </p>
+                <p class="h6 text-start">
+                    Position: <?php
+                        if(isset($selectedID)){
+                            echo $selectedID->position;
+                        }
+                        else {
+                            echo 'No Selected';
+                        }
+                    ?>
+                </p>
             </div>
         </div>
 
         <div class="row my-2">
             <div class="col">
-                <table class="table table-primary table-bordered" id = "dataTable">
+                <table class="table table-bordered " id = "dataTable">
                     <thead>
+                        
+                    </thead>
+                    <tbody>
                         <tr>
-                            <td></td>
+                            <th></th>
                             <?php
                                 foreach ($evalrow as $name) {
                                     
                                     $split = explode(" ",$name->name);
-                                    $parsed = $split[2].'-'.$split[count($split) - 1];
-                                    echo "<td class='text-center'>".$parsed."</td>";
+                                    $parsed = $split[2].' Sem '.$split[count($split) - 1];
+                                    echo "<th class='text-center text-wrap' style='width: 5vh; max-width: 10vh;'> ".$parsed."</th>";
                                 }
                             ?>
                             
                         </tr>
-                    </thead>
-                    <tbody>
                         
                         <tr>
-                            <td class="text-center">Average per Sem</td>
+                            <th class="text-center" style = "width: 5vh; max-width: 10vh; " >
+                                <span class="h6 text-wrap">Average Student Evaluation per sem</span>
+                            </th>
                             <?php
-                                foreach ($evalrow as $evalinfo){
+                                $totalAverage = 0;
+                                $c = 0;
+                                foreach ($evalrow as $evalinfo) {
                                     $isEmpty = true;
                                     foreach($query as $row){
                                         if($row->evalID == $evalinfo->id){
-                                            $average = $row->sum / $row->no * 4;
-                                            echo "<td class='text-center'>".number_format((float)$average, 2, '.', '')."</td>";
+                                            $average = ($row->sum / $row->no * 4) / 25.0 * 100.0;
+                                            echo "<th class='text-center align-middle'>".number_format((float)$average, 2, '.', '')."</th>";
                                             $isEmpty = false;
+                                            $totalAverage += $average;
+                                            $c++;
                                             break;
+                                            
                                         }
                                     }
-                                    if($isEmpty){
-                                        echo "<td class='text-center'>N/A</td>";
+                                    if($isEmpty) {
+                                        echo "<th class='text-center align-middle'>N/A</th>";
                                     }
                                 }
+                                if($c > 0)
+                                    $totalAverage = $totalAverage / $c;
                             ?>
+
+                            
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <th text-center>
+                            Average 
+                        </th>
+                        <td class="text-center" colspan="6">
+                            <?php
+                                echo number_format((float)$totalAverage, 3, '.', '');
+                            ?>
+                        </td>
+                    </tfoot>
                     
                 </table>
             </div>
@@ -124,7 +167,6 @@
     </div>
 
 
-</main>
 
 
 

@@ -95,9 +95,19 @@
         .dataTables_wrapper .dataTables_paginate .paginate_button {
             padding: 0px;
         }
-        .table-primary {
-            --bs-table-bg: #f0f2f5;
+        .table {
+           
             border-color: black;
+        }
+        h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+            color: black;
+        }
+        td {
+            border-width: 1px;
+            color: black;
+        }
+        th {
+            color: black;
         }
     </style>
 </head>

@@ -29,7 +29,7 @@ class SummarySem extends BaseController {
         $fID = $this->request->getPost('fName');
       
         
-        $data['selectedID'] = $this->db->table('faculty')->select('id, fname, lname')->where('id', $fID)->get()->getRow();
+        $data['selectedID'] = $this->db->table('faculty')->select('id, fname, lname, position')->where('id', $fID)->get()->getRow();
         
         
 

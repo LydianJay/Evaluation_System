@@ -11,7 +11,7 @@ $(document).ready(function() {
         let elem = document.getElementById('pdfContent');
         
 
-        let fname = document.getElementById('fName').textContent;
+        let fname = "docs";
         let fileName = fname.concat('.pdf');
 
         var opt = {
