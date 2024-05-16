@@ -131,6 +131,9 @@
         <div class="container-fluid mb-5">
             
             <p class="h5 text-center">Surigao Del Norte State University</p>
+            <p class="h6 text-center">Narciso St, Surigao City, Surigao del Norte</p>
+            <p class="h6 text-center mt-1">CHED-BDM JC#3</p>
+            <p class="h6 text-center mt-1">Rating Perion: May 2024</p>
         </div>
 
 
@@ -192,10 +195,14 @@
         </div>
         
 
-        <div class="row my-5">
+        <div class="row mt-5">
             <div class="col">
-                <table class="table table-bordered border-dark" id = "docu">
+                <table class="table table-bordered" id = "docu">
                     <thead>
+                        
+                    </thead>
+                
+                    <tbody>
                         <tr>
                             <th></th>
                             <?php
@@ -217,19 +224,16 @@
                                 </p>
                             </th>
                         </tr>
-                    </thead>
-                
-                    <tbody>
                         <tr>
-                            <th class="text-center">
-                                    <p class="h4">Evaluation</p>
+                            <th class="text-center text-wrap align-middle" style='width: 5vh; max-width: 12vh;'>
+                                    <p class="h6">Student Evaluation</p>
                             </th>
                             <?php
                                 $sum = 0;
                                 if(isset($ratings)){
                                     foreach($ratings as $rating) {
                             ?>
-                            <th class="text-center">
+                            <th class="text-center align-middle">
                                 <p class="h6">
 
                             <?php 
@@ -262,7 +266,7 @@
                                 }
                             ?>
                             
-                            <th class="text-center">
+                            <th class="text-center align-middle">
                                 <p class="h6">
                                     <?php echo round($sum, 2); ?>
                                 </p>
@@ -277,20 +281,17 @@
         
         
 
-        <div class="container-fluid pt-2">
-            <div class="container">
-                <p class="h4">Legend</p>
-            </div>
+        <div class="container-fluid d-flex flex-row justify-content-around no-wrap">
+            <p class="h7 me-1">Legend</p>
+            
             <?php
                 foreach ($catTbl as $cat) {
             ?>
-            <div class="container">
-                    <p class="h6">
-                        <?php
-                            echo $cat->catName." - ".$cat->title;
-                        ?>
-                    </p>
-            </div>
+            <p class="h7">
+                <?php
+                    echo $cat->catName."-".$cat->title;
+                ?>
+            </p>
 
             <?php } ?>
 

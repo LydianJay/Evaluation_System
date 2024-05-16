@@ -75,7 +75,7 @@ class SummaryInc extends BaseController {
             foreach ($data['termTbl'] as $term) {
                 if($term->id == $data['selectedTerm']){
                     
-                    $data['termData'] = ($term->term == 0 ? '1st Semester' : '2nd Semester').' '.$term->acadYear.'-'.($term->acadYear + 1);
+                    $data['termData'] = ($term->term == 1 ? '1st Semester' : '2nd Semester').' '.$term->acadYear.'-'.($term->acadYear + 1);
                 }
             }
         }

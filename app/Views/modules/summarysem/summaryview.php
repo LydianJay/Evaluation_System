@@ -63,7 +63,7 @@
                 <p class="h4 text-center">Surigao Del Norte State University</p>
                 <p class="h6 text-center">Narciso St, Surigao City, Surigao del Norte</p>
                 <p class="h6 text-center mt-1">CHED-BDM JC#3</p>
-                <p class="h6 text-center mt-1">Rating Perion:</p>
+                <p class="h6 text-center mt-1">Rating Perion: May 2024</p>
             </div>
 
         
@@ -80,7 +80,7 @@
                     ?>
                 </p>
                 <p class="h6 text-start">
-                    Position: <?php
+                    Present Academic Rank: <?php
                         if(isset($selectedID)){
                             echo $selectedID->position;
                         }
